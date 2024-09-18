@@ -5,6 +5,7 @@
 - Java/Spring Boot
 - Spring Cloud
 - Kotlin/Ktor
+- TensorFlow
 - PostgreSQL
 - MongoDB
 - Docker
