@@ -32,3 +32,6 @@
 ### `gateway_service`
   - Описание: Маршрутизатор для всех сервисов.
   - Стэк: Java, Spring Cloud.
+
+
+![](t-dostavka.svg)
