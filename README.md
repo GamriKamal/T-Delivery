@@ -5,7 +5,6 @@
 - Java/Spring Boot
 - Spring Cloud
 - Kotlin/Ktor
-- TensorFlow
 - PostgreSQL
 - MongoDB
 - Docker
@@ -19,7 +18,7 @@
   - Стэк: Java, PostgreSQL, JWT и OAuth 2.0.
 
 ### `menu_service`
-  - Описание: Подтягивание данных с API, вывод на странице сайта и сохранение в бд.
+  - Описание: Подтягивание данных с API, вывод на странице сайта и астнхронное сохранение в бд. Добавление новых блюд через csv файлы.
   - Стэк: Kotlin, MongoDB.
     
 ### `order_service`
@@ -27,8 +26,8 @@
   - Стэк: Java, PostgreSQL.
     
 ### `delivery_service`
-  - Описание: Расчет времени доставки, отправка статуса заказа и генерирование ценообразования через ии в зависимости от загруженности города.
-  - Стэк: Java, PostgreSQL, Kafka, TensorFlow и API Yandex Maps.
+  - Описание: Helper сервис. Отправка статуса заказа через Kafka и генерирование ценообразования в зависимости от загруженности города. 
+  - Стэк: Java, Kafka и API Yandex Maps.
 
 ### `gateway_service`
   - Описание: Маршрутизатор для всех сервисов.
