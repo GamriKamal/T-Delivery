@@ -41,3 +41,5 @@
 ### `courier_service`
 - **Описание**: Управление курьерами. Курьеры смогут регистрироваться, получать заказы и уведомлять о статусе доставки.  
 - **Стек**: Kotlin, Spring Boot, PostgreSQL, Apache Kafka, Docker.
+
+![](t-dostavka.svg)
