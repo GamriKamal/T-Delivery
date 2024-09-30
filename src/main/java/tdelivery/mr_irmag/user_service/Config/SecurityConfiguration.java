@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -43,7 +42,7 @@ public class SecurityConfiguration {
                 }))
 
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

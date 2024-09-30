@@ -11,7 +11,7 @@ import tdelivery.mr_irmag.user_service.Exceptions.EmailAlreadyExistsException;
 import tdelivery.mr_irmag.user_service.Exceptions.UsernameAlreadyExistsException;
 import tdelivery.mr_irmag.user_service.Repository.UserRepository;
 
-import java.security.Security;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +22,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+    }
     public User create(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует");
