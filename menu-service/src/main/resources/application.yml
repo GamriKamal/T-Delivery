@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: menu-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/menu-service
+
+server:
+  port: 8082
+
+cloud:
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
+      register-with-eureka: true
+      fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+products:
+  hardees:
+    path: /data/products_hardees.json
+  kfc:
+    path: /data/products_kfc.json

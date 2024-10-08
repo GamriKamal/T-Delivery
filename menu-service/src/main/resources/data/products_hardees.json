@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Гавайи Биф Бургер",
+    "price": 2300,
+    "description": "Сочные говяжьи котлеты, покрытые ананасом и специальным соусом, придающим блюду тропический вкус. Отличный выбор для любителей экзотики.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5419.png"
+  },
+  {
+    "name": "Гавайи Чикен Бургер",
+    "price": 2300,
+    "description": "Нежное куриное филе с ананасом и ароматным соусом, которое перенесет вас на солнечные пляжи Гавайев. Идеальный бургер для любителей курицы.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5418.png"
+  },
+  {
+    "name": "Чизи Тендерс 3 шт",
+    "price": 1300,
+    "description": "Нежные куриные тендерсы, обжаренные до золотистой корочки с аппетитной сырной начинкой. Идеальный выбор для настоящих любителей сыра.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_4956.png"
+  },
+  {
+    "name": "Чизи Фрайз",
+    "price": 1250,
+    "description": "Хрустящие картофельные фри с плавленым сыром, которые подаются горячими. Идеальная закуска для гурманов.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5089.jpg"
+  },
+  {
+    "name": "Монстер Бургер",
+    "price": 3750,
+    "description": "Огромный бургер с несколькими котлетами, сочными овощами и оригинальными соусами. Для настоящих гурманов!",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5216.png"
+  },
+  {
+    "name": "Супер Стар Чикен Бургер",
+    "price": 2800,
+    "description": "Куриный бургер с XXL порцией, укрытый свежими овощами и специальным соусом для насыщенного вкуса.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5255.png"
+  },
+  {
+    "name": "Феймос Стар Бургер",
+    "price": 2050,
+    "description": "Популярный бургер с вкусной говяжьей котлетой и секретным соусом, который стал хитом среди наших клиентов.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5316.png"
+  },
+  {
+    "name": "Супер Стар Бургер",
+    "price": 3000,
+    "description": "Идеальное сочетание сочной котлеты, свежих овощей и секретного соуса в огромном формате.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5220.png"
+  },
+  {
+    "name": "Мега Стар Бургер",
+    "price": 3950,
+    "description": "Гигантский бургер с несколькими слоями мясного фарша, плавленого сыра и сочных овощей. Порадуйте себя настоящей порцией!",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5215.png"
+  },
+  {
+    "name": "Биг Бургер",
+    "price": 1900,
+    "description": "Классический бургер с говяжьей котлетой, свежими овощами и соусом, который никогда не выйдет из моды.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5457.png"
+  },
+  {
+    "name": "Портобелло Машрум Бургер",
+    "price": 2200,
+    "description": "Вкусный бургер с грибами портобелло, идеально подходит для любителей вегетарианской кухни.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5298.png"
+  },
+  {
+    "name": "Халапеньо Бургер",
+    "price": 3100,
+    "description": "Острый бургер с халапеньо и сочной котлетой, который порадует любителей пикантных блюд.",
+    "imageUrl": "https://www.hardees.kz/admin/files/medium/medium_5286.jpg"
+  }
+]

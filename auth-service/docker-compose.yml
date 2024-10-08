@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  postgres_db:
+    image: postgres:13
+    container_name: postgresql_db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=irmag
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=auth_db
+    volumes:
+      - ./db-volume:/var/lib/postgresql/data
+    networks:
+      - auth-service-t-delivery
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auth-service
+    environment:
+        - DB_URL=jdbc:postgresql://postgres_db:5433/auth_db
+        - DB_USERNAME=irmag
+        - DB_PASSWORD=123
+    ports:
+        - "8081:8081"
+    depends_on:
+        - postgres_db
+    networks:
+        - auth-service-t-delivery
+
+networks:
+  t-delivey:
+    driver: bridge
+  auth-service-t-delivery:
+    driver: bridge

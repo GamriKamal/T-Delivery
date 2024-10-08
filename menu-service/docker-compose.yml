@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  mongodb-menu-service:
+    image: mongo:latest
+    container_name: mongodb-menu-service
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb-storage:/data/db
+    networks:
+      - menu-service
+
+networks:
+  menu-service:
+    driver: bridge
