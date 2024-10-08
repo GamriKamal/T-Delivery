@@ -1,6 +1,7 @@
 package tdelivery.mr_irmag.auth_service.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class UserService {
     private final UserRepository userRepository;
 
@@ -36,8 +38,11 @@ public class UserService {
             }
 
             return save(user);
+        } catch (UsernameAlreadyExistsException | EmailAlreadyExistsException e) {
+            log.error(e.getMessage());
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("An error occurred when creating a user: ", e);
+            throw new RuntimeException("An error occurred when creating a user: " + e.getMessage(), e);
         }
     }
 

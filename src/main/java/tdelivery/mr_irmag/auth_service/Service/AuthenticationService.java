@@ -46,4 +46,9 @@ public class AuthenticationService {
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);
     }
+
+    public void getAdmin(){
+        userService.getAdmin();
+    }
+
 }
