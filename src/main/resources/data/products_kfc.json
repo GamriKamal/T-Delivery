@@ -1,0 +1,650 @@
+[
+  {
+    "name": "Баскет Сандерс Трио + Крокетсы",
+    "price": 6200,
+    "description": "3 ножки оригинальных, 6 крыла, 6 стрипсов оригинальных, 6 наггетсов, Крокетсы",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4983.jpg"
+  },
+  {
+    "name": "9 НОЖЕК + PEPSI 1Л",
+    "price": 5500,
+    "description": "Баскет 9 ножек, Pepsi 1 л",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4608.jpg"
+  },
+  {
+    "name": "Френдс Бокс + Pepsi 1Л",
+    "price": 8800,
+    "description": "5 ножек, 10 крыльев, 5 стрипсов, байтсы, баскет фри, Pepsi 1L",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4986.jpg"
+  },
+  {
+    "name": "Ет Керемет + Крокетсы",
+    "price": 2400,
+    "description": "Два оригинальных/ острых филе, майонез, 2 слайса говядины, ломтик сыра, Крокетсы (стандарт)",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4973.jpg"
+  },
+  {
+    "name": "Пати Бокс + 1Л Pepsi",
+    "price": 7100,
+    "description": "10 оригинальных/острых стрипсов, 15 наггетсов, байтсы, 5 соусов, 1Л Pepsi",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4981.jpg"
+  },
+  {
+    "name": "Баскет Cандерс Дуэт + Крокетсы",
+    "price": 4100,
+    "description": "2 ножки оригинальных/острых, 4 острых крыла, 4 стрипса оригинальных/острых, 4 наггетса, крокетс увеличенный",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5113.jpg"
+  },
+  {
+    "name": "Ет Керемет (x2) + 1Л Pepsi",
+    "price": 4800,
+    "description": "Два острых/ оригинальных бургера Ет Керемет, 1Л Pepsi",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4976.jpg"
+  },
+  {
+    "name": "Френдс бокс 36 острых крылышек",
+    "price": 10900,
+    "description": "36 острых крылышек, баскет картофель фри",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5110.png"
+  },
+  {
+    "name": "Френдс бокс",
+    "price": 8800,
+    "description": "5 ножек, 5 стрипсов, 10 острых крылышек, байтсы, баскет фри",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4910.jpg"
+  },
+  {
+    "name": "Пати Бокс",
+    "price": 7100,
+    "description": "10 оригинальных/острых стрипсов, 15 наггетсов, байтсы, 5 соусов",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4789.jpg"
+  },
+  {
+    "name": "Баскет Сандерс Трио",
+    "price": 6200,
+    "description": "3 ножки оригинальных, 6 крыла, 6 стрипсов оригинальных, 6 наггетсов",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4776.jpg"
+  },
+  {
+    "name": "Баскет Cандерс Дуэт",
+    "price": 4100,
+    "description": "2 ножки оригинальных, 4 крыла, 4 стрипса оригинальных, 4 наггетса",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4773.jpg"
+  },
+  {
+    "name": "Сандерс баскет",
+    "price": 1990,
+    "description": "1 ножка оригинальная, 2 крыла, 2 стрипса оригинальных, 2 наггетса.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4774.jpg"
+  },
+  {
+    "name": "Баскет 4 ножки",
+    "price": 2600,
+    "description": "4 ножки",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4277.jpg"
+  },
+  {
+    "name": "Баскет 9 ножек",
+    "price": 5500,
+    "description": "9 ножек",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4278.jpg"
+  },
+  {
+    "name": "Баскеты крыльев",
+    "price": 3250,
+    "description": "9,18 или 24 острых крыльев",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4349.jpg"
+  },
+  {
+    "name": "Баскет S Крылышки и Ножки",
+    "price": 3200,
+    "description": "4 острых крылышка, 2 ножки",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5096.jpg"
+  },
+  {
+    "name": "Баскет M Крылышки и Ножки",
+    "price": 5250,
+    "description": "8 острых крылышка, 4 ножки",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5097.jpg"
+  },
+  {
+    "name": "Баскет L Крылышки и Ножки",
+    "price": 6950,
+    "description": "12 острых крылышка, 6 ножки",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5112.png"
+  },
+  {
+    "name": "Баскет S Крылышки/Стрипсы/Наггетсы",
+    "price": 4100,
+    "description": "5 крыльев, 5 стрипс, 10 наггетс",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5101.jpg"
+  },
+  {
+    "name": "Наггетсы",
+    "price": "1 050",
+    "description": "",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4282.jpg"
+  },
+  {
+    "name": "1 Стрипсы",
+    "price": "400",
+    "description": "Острые или оригинальные стрипсы",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5107.png"
+  },
+  {
+    "name": "Баскет байтс",
+    "price": "2 450",
+    "description": "",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4304.jpg"
+  },
+  {
+    "name": "Острые крылышки",
+    "price": "1 200",
+    "description": "3 или 5 острых крыльев",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5092.png"
+  },
+  {
+    "name": "7 стрипсов",
+    "price": "2 450",
+    "description": "",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4280.jpg"
+  },
+  {
+    "name": "5 стрипсов",
+    "price": "1 900",
+    "description": "",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4279.jpg"
+  },
+  {
+    "name": "1 ножка",
+    "price": "700",
+    "description": "",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4275.jpg"
+  },
+  {
+    "name": "САНДЕРС МЕГА БУРГЕР БОКС",
+    "price": "4 050",
+    "description": "Сандерс Мега Бургер, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5064.jpg"
+  },
+  {
+    "name": "Дабл Шефбургер Оригинальный бокс",
+    "price": "4 100",
+    "description": "Дабл Шефбургер, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4993.jpg"
+  },
+  {
+    "name": "Дабл Шефбургер Острый бокс",
+    "price": "4 100",
+    "description": "Дабл Шефбургер, 2 стрипса, картофель фри большой, Pepsi 0,5L, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5066.jpg"
+  },
+  {
+    "name": "Шефбургер Оригинальный бокс",
+    "price": "3 400",
+    "description": "Шефбургер, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5000.jpg"
+  },
+  {
+    "name": "Шефбургер Острый бокс",
+    "price": "3 400",
+    "description": "Шефбургер, Картофель фри средний, Pepsi 0,4L, 2 стрипса, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5067.jpg"
+  },
+  {
+    "name": "Шеф Тауэр бокс Оригинальный",
+    "price": "3 950",
+    "description": "Шеф Тауэр, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5071.jpg"
+  },
+  {
+    "name": "Шеф Тауэр бокс Острый",
+    "price": "3 950",
+    "description": "Шеф Тауэр, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5070.jpg"
+  },
+  {
+    "name": "ТВИСТЕР КЕБАБ БОКС",
+    "price": "3 550",
+    "description": "Твистер Кебаб, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4516.png"
+  },
+  {
+    "name": "Боксмастер бокс",
+    "price": "3 900",
+    "description": "Боксмастер, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5074.jpg"
+  },
+  {
+    "name": "Твистер бокс",
+    "price": "3 400",
+    "description": "Твистер, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4991.jpg"
+  },
+  {
+    "name": "Чизбургер бокс",
+    "price": "3 250",
+    "description": "Чизбургер, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5076.jpg"
+  },
+  {
+    "name": "Твистер Дуэт Оригинальный бокс",
+    "price": "3 550",
+    "description": "Твистер Дуэт, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5046.jpg"
+  },
+  {
+    "name": "Твистер Дуэт Острый бокс",
+    "price": "3 550",
+    "description": "Твистер Дуэт, 2 стрипса или 2 острых крыла, картофель фри большой, Pepsi 0,5Л, сырный соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5046.jpg"
+  },
+  {
+    "name": "Твистер Дуэт Оригинальный Комбо",
+    "price": "3 050",
+    "description": "Твистер Дуэт, картофель фри большой, Pepsi 0,5л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5042.jpg"
+  },
+  {
+    "name": "Твистер Дуэт Острый Комбо",
+    "price": "3 050",
+    "description": "Твистер Дуэт, картофель фри большой, Pepsi 0,5л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5043.jpg"
+  },
+  {
+    "name": "Ай-Твистер Дуэт Комбо",
+    "price": "2 000",
+    "description": "Ай-Твистер Дуэт, картофель фри большой, Pepsi 0,5л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5045.jpg"
+  },
+  {
+    "name": "Ет Керемет Комбо",
+    "price": "3 600",
+    "description": "Два оригинальных/ острых филе, майонез, 2 слайса говядины, ломтик сыра, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5072.jpg"
+  },
+  {
+    "name": "САНДЕРС МЕГА БУРГЕР КОМБО",
+    "price": "3 500",
+    "description": "Сандерс Мега Бургер, картофель фри большой, Pepsi 0,5 л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5057.jpg"
+  },
+  {
+    "name": "Шеф Тауэр комбо Оригинальный",
+    "price": "3 400",
+    "description": "Шеф Тауэр, картофель фри большой, Pepsi 0,5L, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4994.jpg"
+  },
+  {
+    "name": "Шеф Тауэр комбо Острый",
+    "price": "3 400",
+    "description": "Шеф Тауэр, картофель фри большой, Pepsi 0,5L, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4994.jpg"
+  },
+  {
+    "name": "Дабл Шефбургер Оригинальный комбо",
+    "price": "3 600",
+    "description": "Дабл Шефбургер, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5062.jpg"
+  },
+  {
+    "name": "Дабл Шефбургер Острый Комбо",
+    "price": "3 600",
+    "description": "Дабл Шефбургер, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5061.jpg"
+  },
+  {
+    "name": "Шефбургер комбо Оригинальный",
+    "price": "2 850",
+    "description": "Шефбургер, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4999.jpg"
+  },
+  {
+    "name": "Шефбургер комбо Острый",
+    "price": "2 850",
+    "description": "Шефбургер, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4999.jpg"
+  },
+  {
+    "name": "Боксмастер комбо",
+    "price": "3 300",
+    "description": "Боксмастер, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4987.jpg"
+  },
+  {
+    "name": "ТВИСТЕР КЕБАБ КОМБО",
+    "price": "3 050",
+    "description": "Твистер Кебаб, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4532.png"
+  },
+  {
+    "name": "Чизбургер комбо",
+    "price": "2 700",
+    "description": "Чизбургер, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5055.jpg"
+  },
+  {
+    "name": "Твистер комбо",
+    "price": "2 850",
+    "description": "Твистер, картофель фри большой, Pepsi 0,5Л, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4988.jpg"
+  },
+  {
+    "name": "Френдс бокс 36 крылышек Комбо",
+    "price": "12 800",
+    "description": "36 острых крылышек, баскет картофель фри, Pepsi 1.5л, 4 соуса",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5109.png"
+  },
+  {
+    "name": "Пати Бокс Комбо",
+    "price": "9 140",
+    "description": "10 оригинальных/острых стрипсов, 15 наггетсов, байтсы, 5 соусов, баскет фри, Pepsi 1.5 Л",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5050.jpg"
+  },
+  {
+    "name": "Френдс бокс комбо",
+    "price": "10 600",
+    "description": "Френдс Бокс, Pepsi 1,5Л, 2 сырных соуса, 2 кетчупа",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5077.jpg"
+  },
+  {
+    "name": "БАСКЕТ 9 НОЖЕК КОМБО",
+    "price": "7 200",
+    "description": "Баскет 9 ножек, Pepsi 1Л, баскет фри, 3 соуса",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5001.jpg"
+  },
+  {
+    "name": "БАСКЕТ 4 НОЖКИ КОМБО",
+    "price": "3 900",
+    "description": "Баскет 4 ножки, Pepsi 0,5Л, большой фри, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5002.jpg"
+  },
+  {
+    "name": "Баскет Сандерс Трио Комбо",
+    "price": "8 700",
+    "description": "3 ножки, 6 крыльев, 6 стрипсов, 6 наггетсов, Pepsi 1,5л, баскет фри , 3 соуса",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4997.jpg"
+  },
+  {
+    "name": "Баскет Сандерс Дуэт Комбо",
+    "price": "6 100",
+    "description": "2 ножки оригинальных, 4 крыла, 4 стрипса оригинальных, 4 наггетса, Pepsi 1л, 2 стандартных картофеля фри , 2 соуса",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5048.jpg"
+  },
+  {
+    "name": "Сандерс баскет комбо",
+    "price": "3 350",
+    "description": "1 ножка, 2 острых крылышка, 2 cтрипса, 2 наггетса, Pepsi 0.5L, 1 стандартный картофель фри, 1 соус",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5049.jpg"
+  },
+  {
+    "name": "Баскет 9 крыльев Комбо",
+    "price": "4 950",
+    "description": "9 Крылышек, Пепси 1л, картофель фри, сырный соус, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5099.png"
+  },
+  {
+    "name": "Баскет 18 крыльев Комбо",
+    "price": "7 550",
+    "description": "18 Крылышек, Пепси 1л, картофель фри, 2 сырный соус, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5091.jpg"
+  },
+  {
+    "name": "Баскет 24 крыльев Комбо",
+    "price": "9 940",
+    "description": "24 Крылышек, Пепси 1л, картофель фри, 2 сырный соус, 2 кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5100.png"
+  },
+  {
+    "name": "Баскет S Крылышки и Ножки Комбо",
+    "price": "5 000",
+    "description": "4 острых крылышка, 2 ножки, Пепси 1л, картофель фри, сырный соус, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5102.jpg"
+  },
+  {
+    "name": "Баскет M Крылышки и Ножки Комбо",
+    "price": "8 000",
+    "description": "8 острых крылышек, 4 ножки, Пепси 1.5л, Баскет картофель фри, 2 сырных соуса, 2 кетчупа",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5103.jpg"
+  },
+  {
+    "name": "Баскет L Крылышки и Ножки Комбо",
+    "price": "9 900",
+    "description": "12 острых крылышка, 6 ножки, Пепси 1.5л, Баскет картофель фри, 3 сырных соуса, 2 кетчупа",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5104.png"
+  },
+  {
+    "name": "Баскет S Крылышки/Стрипсы/Наггетсы Комбо",
+    "price": "5 800",
+    "description": "5 крыльев, 5 стрипс, 10 наггетс, Pepsi 1л , картофель фри, сырный соус, кетчуп",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5105.jpg"
+  },
+  {
+    "name": "САНДЕРС МЕГА БУРГЕР",
+    "price": "2 350",
+    "description": "3 стрипса, помидоры, салат айсберг, соленые огурчики, соус Бургер Классик, булочка бриошь и 2 ломтика сыра",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4511.png"
+  },
+  {
+    "name": "Дабл Шефбургер Острый",
+    "price": "2 400",
+    "description": "2 филе в уникальной панировке, маринованные огурцы, лук, салат айсберг, соус Бургер, булочка и ломтик сыра",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4328.jpg"
+  },
+  {
+    "name": "Дабл Шефбургер",
+    "price": "2 400",
+    "description": "2 филе в уникальной панировке, томаты, салат айсберг, соус Цезарь, булочка и ломтик сыра",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4325.jpg"
+  },
+  {
+    "name": "ШЕФ ТАУЭР",
+    "price": "2 150",
+    "description": "Филе в уникальной панировке, картофель хашбраун, ломтик сыра, салат айсберг, помидоры, соус Цезарь на пшеничной булочке с черно-белым кунжутом",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5125.png"
+  },
+  {
+    "name": "Шефбургер",
+    "price": "1 650",
+    "description": "Филе в уникальной панировке, салат айсберг, помидоры, соус Цезарь на пшеничной булочке с черно-белым кунжутом",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5126.png"
+  },
+  {
+    "name": "Чизбургер",
+    "price": "1 400",
+    "description": "2 стрипса оригинальных, лук, сыр чеддер, маринованные огурцы, горчичный соус, кетчуп, на пшеничной булочке с кунжутом",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4844.jpg"
+  },
+  {
+    "name": "Ет Керемет",
+    "price": "2 400",
+    "description": "Два оригинальных/острых филе, майонез, 2 слайса говядины, ломтик сыра.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4963.jpg"
+  },
+  {
+    "name": "ТВИСТЕР КЕБАБ",
+    "price": "1 750",
+    "description": "2 острых/оригинальных стрипса, картофель фри, листья салата, ломтик сыра, помидоры, маринованные огурчики, лук, кетчуп и соус Бургер Классик в пшеничной лепешке",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4538.png"
+  },
+  {
+    "name": "БОКСМАСТЕР",
+    "price": "2 050",
+    "description": "Филе в уникальной панировке, картофель хашбраун, ломтик сыра, салат, помидоры и нежный соус в пшеничной лепешке",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4842.jpg"
+  },
+  {
+    "name": "Твистер",
+    "price": "1 650",
+    "description": "2 острых/оригинальных стрипса, салат айсберг, томаты, нежный соус в пшеничной лепешке",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4843.jpg"
+  },
+  {
+    "name": "Твистер Дуэт Оригинальный",
+    "price": "1 750",
+    "description": "2 оригинальных стрипса, слайс говядины, сыр, салат айсберг, томаты, нежный соус в пшеничной лепешке",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5041.jpg"
+  },
+  {
+    "name": "Твистер Дуэт Острый",
+    "price": "1 750",
+    "description": "2 острых стрипса, слайс говядины, маринованные огурцы, халапеньо, пикантный соус в пшеничной лепешке",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5041.jpg"
+  },
+  {
+    "name": "Ай-Твистер Дуэт",
+    "price": "950",
+    "description": "оригинальный стрипс, слайс говядины, сыр, салат айсберг, томаты, нежный соус в пшеничной лепешке",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5044.jpg"
+  },
+  {
+    "name": "Баскет крокетсов",
+    "price": "1 300",
+    "description": "Хрустящий и сочный снэк из тертого картофеля",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4897.jpg"
+  },
+  {
+    "name": "Крокетсы большой",
+    "price": "690",
+    "description": "Хрустящий и сочный снэк из тертого картофеля",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4896.jpg"
+  },
+  {
+    "name": "Крокетсы стандартный",
+    "price": "590",
+    "description": "Хрустящий и сочный снэк из тертого картофеля",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4895.jpg"
+  },
+  {
+    "name": "БАЙТС&ФРИ сырный",
+    "price": "1 590",
+    "description": "Картофель фри, сырный соус, байтсы",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4578.png"
+  },
+  {
+    "name": "БАЙТС&ФРИ горчично-томатный",
+    "price": "1 590",
+    "description": "Картофель фри, горчично-томатный соус, байтсы",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4577.png"
+  },
+  {
+    "name": "ХАШБРАУН",
+    "price": "400",
+    "description": "Хрустящие картофельные хэшбрауны, идеально подходящие для завтрака.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4470.jpg"
+  },
+  {
+    "name": "БАСКЕТ ФРИ",
+    "price": "1 100",
+    "description": "Большая порция картофеля фри, подаётся с соусами на выбор.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4319.jpg"
+  },
+  {
+    "name": "Картофель фри большой",
+    "price": "690",
+    "description": "Большая порция хрустящего картофеля фри.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4317.jpg"
+  },
+  {
+    "name": "картофель фри стандартный",
+    "price": "590",
+    "description": "Классическая порция картофеля фри для истинных любителей.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4869.jpg"
+  },
+  {
+    "name": "Сырный соус",
+    "price": "165",
+    "description": "Нежный сырный соус, идеально подходящий к картошке.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4289.jpg"
+  },
+  {
+    "name": "Кетчуп",
+    "price": "165",
+    "description": "Классический кетчуп, который прекрасно дополняет любые закуски.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4291.jpg"
+  },
+  {
+    "name": "Терияки соус",
+    "price": "165",
+    "description": "Сладкий и солёный соус терияки, который придаёт блюдам особый вкус.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4293.jpg"
+  },
+  {
+    "name": "Кисло-сладкий соус",
+    "price": "165",
+    "description": "Соус с уникальным кисло-сладким вкусом, идеально подходит к мясным блюдам.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4292.jpg"
+  },
+  {
+    "name": "Чесночный соус",
+    "price": "165",
+    "description": "Ароматный чесночный соус, который добавит пикантности любому блюду.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4290.jpg"
+  },
+  {
+    "name": "Барбекю соус",
+    "price": "165",
+    "description": "Копчёный соус барбекю, идеален для гриль-блюд.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4288.jpg"
+  },
+  {
+    "name": "Булочка",
+    "price": "200",
+    "description": "Свежая булочка, которая отлично подойдёт к вашим любимым начинкам.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4305.jpg"
+  },
+  {
+    "name": "Сыр",
+    "price": "150",
+    "description": "Нежный сыр, который добавит вкуса любому блюду.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4306.jpg"
+  },
+  {
+    "name": "Слайс Говядины",
+    "price": "250",
+    "description": "Сочный слайс говядины, отлично подойдёт для бургеров и закусок.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5047.png"
+  },
+  {
+    "name": "Халапеньо",
+    "price": "150",
+    "description": "Острые халапеньо для любителей пикантной пищи.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5108.jpg"
+  },
+  {
+    "name": "Pepsi 0,5 л",
+    "price": "650",
+    "description": "Освежающий газированный напиток с классическим вкусом.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_5106.jpg"
+  },
+  {
+    "name": "Lipton Ice tea 0,5 л",
+    "price": "650",
+    "description": "Освежающий холодный чай с лёгким вкусом.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4302.jpg"
+  },
+  {
+    "name": "Cок DA-DA 0,2л. (в ассортименте)",
+    "price": "400",
+    "description": "Сладкий фруктовый сок, разнообразие вкусов для каждого.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4725.png"
+  },
+  {
+    "name": "Asu вода без газа 0,5 л",
+    "price": 400,
+    "description": "Чистая вода без газа для утоления жажды.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4357.jpg"
+  },
+  {
+    "name": "Asu вода газированная 0,5 л",
+    "price": 400,
+    "description": "Вода с газом для любителей шипучих напитков.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4358.jpg"
+  },
+  {
+    "name": "Pepsi zero 0.5 л",
+    "price": 650,
+    "description": "Газированный напиток без сахара с классическим вкусом.",
+    "imageUrl": "https://www.kfc.kz/admin/files/medium/medium_4722.jpg"
+  }
+]

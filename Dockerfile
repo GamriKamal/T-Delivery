@@ -1,5 +1,4 @@
-FROM openjdk:17-oracle
-LABEL authors="mrirmag"
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} auth_service.jar
-ENTRYPOINT ["java","-jar","/auth_service.jar"]
+FROM openjdk:17
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} menu-service.jar
+ENTRYPOINT ["java","-jar","/menu-service.jar"]

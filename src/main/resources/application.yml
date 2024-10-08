@@ -1,24 +1,12 @@
 spring:
   application:
-    name: auth-service
-  datasource:
-#    url: jdbc:postgresql://postgresql_db:5432/auth_db
-    url: jdbc:postgresql://localhost:5433/auth_db
-    driver-class-name: org.postgresql.Driver
-    username: irmag
-    password: 123
-  jpa:
-    hibernate:
-      ddl-auto: update
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-  sql:
-    init:
-      mode: always
+    name: menu-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/menu-service
 
+server:
+  port: 8082
 
 cloud:
   eureka:
@@ -28,9 +16,14 @@ cloud:
       register-with-eureka: true
       fetch-registry: true
 
-token:
-  signing:
-    key: bXlT3cQ7GQ9PTeRHz0kF8FlqKuoZQzP4Vbq4YlU1sjI=
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
-server:
-  port: 8081
+products:
+  hardees:
+    path: /data/products_hardees.json
+  kfc:
+    path: /data/products_kfc.json
