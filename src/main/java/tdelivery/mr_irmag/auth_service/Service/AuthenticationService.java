@@ -47,8 +47,4 @@ public class AuthenticationService {
         return new JwtAuthenticationResponse(jwt);
     }
 
-    public void getAdmin(){
-        userService.getAdmin();
-    }
-
 }
