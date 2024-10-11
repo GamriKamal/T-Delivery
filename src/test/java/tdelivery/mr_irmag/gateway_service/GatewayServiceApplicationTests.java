@@ -1,10 +1,10 @@
-package tdelivery.mr_irmag.user_service;
+package tdelivery.mr_irmag.gateway_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserServiceApplicationTests {
+class GatewayServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,22 +1,29 @@
+server:
+  port: 8000
 spring:
   application:
-    name: auth-service
-  datasource:
-    url: jdbc:h2:mem:security-security
-    driverClassName: org.h2.Driver
-    username: root
-    password: root
-    jpa:
-      hibernate:
-        ddl-auto: create-drop
-      show-sql: true
-      properties:
-        hibernate:
-          format_sql: true
-
+    name: gateway-service
+  cloud:
+    eureka:
+      client:
+        service-url:
+          defaultZone: http://localhost:8761/eureka/
+        register-with-eureka: true
+        fetch-registry: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+    loadbalancer:
+      ribbon:
+        enabled: true
 token:
   signing:
-    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+    key: bXlT3cQ7GQ9PTeRHz0kF8FlqKuoZQzP4Vbq4YlU1sjI=
 
-server:
-  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
