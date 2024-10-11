@@ -27,6 +27,7 @@ public class UserService {
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
+
     public User create(User user) {
         try {
             if (userRepository.existsByUsername(user.getUsername())) {
@@ -61,9 +62,4 @@ public class UserService {
         return getByUsername(username);
     }
 
-    public void getAdmin() {
-        var user = getCurrentUser();
-        user.setRole(Role.ROLE_ADMIN);
-        save(user);
-    }
 }

@@ -25,19 +25,9 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
-//                .route("menu-service", r -> r.path("/menu/upload-csv-file")
-//                        .filters(f -> f.filter((exchange, chain) ->
-//                        {
-//                            return checkUserRole(exchange, "ADMIN")
-//                                    .flatMap(hasRole -> {
-//                                        if (hasRole) {
-//                                            return chain.filter(exchange);
-//                                        }
-//                                        return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN, "Access Denied"));
-//                                    });
-//                        }
-//                        ))
-//                        .uri("lb://menu-service/"))
+                .route("menu-service", r -> r.path("/menu/upload-csv-file")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://menu-service/"))
                 .route("menu-service", r -> r.path("/menu/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://menu-service/"))

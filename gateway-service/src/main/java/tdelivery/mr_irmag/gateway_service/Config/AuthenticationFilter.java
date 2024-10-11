@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -42,6 +43,14 @@ public class AuthenticationFilter implements GatewayFilter {
             }
 
             String email = jwtUtil.extractEmail(token);
+            String role = jwtUtil.extractRole(token);
+            System.out.println(role + " role");
+
+            if (request.getURI().getPath().equals("/menu/upload-csv-file") && !role.equals("ROLE_ADMIN")) {
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                return exchange.getResponse().setComplete();
+            }
+
             this.updateRequest(exchange, token, email);
         }
 
@@ -52,7 +61,7 @@ public class AuthenticationFilter implements GatewayFilter {
         return webClientBuilder.build()
                 .post()
                 .uri("http://auth-service/auth/signIn")
-                .body(BodyInserters.fromFormData("username", "user").with("password", "password")) // Adjust form data as needed
+                .body(BodyInserters.fromFormData("username", "user").with("password", "password"))
                 .retrieve()
                 .bodyToMono(JwtAuthenticationResponse.class)
                 .flatMap(response -> {
