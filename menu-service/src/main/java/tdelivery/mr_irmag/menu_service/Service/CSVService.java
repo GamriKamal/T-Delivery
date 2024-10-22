@@ -1,19 +1,12 @@
 package tdelivery.mr_irmag.menu_service.Service;
 
-import com.netflix.discovery.converters.Auto;
 import com.opencsv.CSVReader;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tdelivery.mr_irmag.menu_service.Domain.Entity.Product;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.List;
 
 @Service
 public class CSVService {

@@ -1,11 +1,11 @@
 package tdelivery.mr_irmag.menu_service.Service;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import tdelivery.mr_irmag.menu_service.Domain.Entity.Product;
-import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
+import tdelivery.mr_irmag.menu_service.Domain.Entity.Product;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,8 +32,7 @@ public class JsonService {
                 return Collections.emptyList();
             }
 
-            Type productListType = new TypeToken<List<Product>>(){}.getType();
-            return gson.fromJson(reader, productListType);
+            return gson.fromJson(reader, new TypeToken<List<Product>>(){}.getType());
         } catch (Exception e) {
             log.error("Failed to parse JSON file: {}", e.getMessage(), e);
             return Collections.emptyList();

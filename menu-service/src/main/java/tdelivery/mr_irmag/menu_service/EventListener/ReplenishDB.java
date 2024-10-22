@@ -1,16 +1,18 @@
 package tdelivery.mr_irmag.menu_service.EventListener;
 
-import tdelivery.mr_irmag.menu_service.Service.JsonService;
-import tdelivery.mr_irmag.menu_service.Service.ProductService;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.bson.Document;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import tdelivery.mr_irmag.menu_service.Exception.ProductAlreadyExistsException;
+import tdelivery.mr_irmag.menu_service.Service.JsonService;
+import tdelivery.mr_irmag.menu_service.Service.ProductService;
 
 @Service
 @Log4j2
@@ -70,8 +72,12 @@ public class ReplenishDB {
 
     public void addDataToDb(){
         log.info("{}Started adding data to db... {}", GREEN_BOLD_BRIGHT, RESET);
-        var productList = jsonService.fromJsonToPOJO(hardeesPath);
-        productList.forEach(item -> productService.saveProduct(item));
-    }
+        try {
+            var productList = jsonService.fromJsonToPOJO(hardeesPath);
+            productList.forEach(item -> productService.saveProduct(item));
 
+        } catch (Exception e){
+            log.error(e.getLocalizedMessage());
+        }
+    }
 }

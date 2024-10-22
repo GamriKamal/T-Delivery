@@ -11,6 +11,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import tdelivery.mr_irmag.gateway_service.DTO.JwtAuthenticationResponse;
+import tdelivery.mr_irmag.gateway_service.Service.JwtUtil;
 
 @RefreshScope
 @Component

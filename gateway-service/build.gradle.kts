@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.4"
 	id("io.spring.dependency-management") version "1.1.6"
+	jacoco
 }
 
 group = "tdelivery.mr_irmag"
@@ -13,6 +14,13 @@ java {
 	}
 }
 
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
+
 repositories {
 	mavenCentral()
 }
@@ -20,6 +28,8 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
+	testImplementation("junit:junit:4.12")
+	testImplementation("org.mockito:mockito-core:4.11.0")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
@@ -40,4 +50,28 @@ dependencyManagement {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+}
+
+jacoco {
+	toolVersion = "0.8.12"
+	reportsDirectory = layout.buildDirectory.dir("reports/jacoco")
+}
+
+tasks.jacocoTestReport {
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+	}
+
+	classDirectories.setFrom(files(classDirectories.files.map {
+		fileTree(it).apply {
+			exclude("tdelivery/mr_irmag/gateway_service/Config/**")
+			exclude("tdelivery/mr_irmag/gateway_service/DTO/**")
+		}
+	}))
 }

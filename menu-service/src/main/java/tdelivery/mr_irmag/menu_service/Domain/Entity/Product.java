@@ -1,13 +1,16 @@
 package tdelivery.mr_irmag.menu_service.Domain.Entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import javax.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class Product {
     @Id
     @Schema(description = "Уникальный идентификатор продукта")
-    private Long id;
+    private String id;
 
     @NotBlank(message = "Название продукта не должно быть пустым")
     @Size(min = 2, max = 100, message = "Название продукта должно содержать от 2 до 100 символов")
