@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -30,13 +31,13 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String extractEmail(String token) {
+    public String extractID(String token) {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("email", String.class);
+                .get("id", String.class);
     }
 
     public String extractRole(String token) {
@@ -62,7 +63,6 @@ public class JwtUtil {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token invalid " + e.getLocalizedMessage());
         }
     }
-
 
 
     public boolean isInvalid(String token) {

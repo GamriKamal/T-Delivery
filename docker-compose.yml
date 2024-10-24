@@ -1,0 +1,109 @@
+version: '3.8'
+services:
+#  discovery-service:
+#    build:
+#      context: ./discovery-service
+#      dockerfile: Dockerfile
+#    container_name: discovery-service
+#    ports:
+#      - "8761:8761"
+#    networks:
+#      - t-delivery
+#
+#  auth-service:
+#    build:
+#      context: ./auth-service
+#      dockerfile: Dockerfile
+#    container_name: auth-service
+#    environment:
+#      - DB_URL=jdbc:postgresql://postgres_db:5432/auth_db
+#      - DB_USERNAME=irmag
+#      - DB_PASSWORD=123
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - auth-service-postgresql-db
+#    networks:
+#      - auth-service-t-delivery
+#      - t-delivery
+
+  auth-service-postgresql-db:
+    image: postgres:13
+    container_name: auth-service-postgresql-db
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=irmag
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=auth_db
+    volumes:
+      - ./auth-service/auth-service-postgresql-db-volume:/var/lib/postgresql/data
+    networks:
+      - auth-service-t-delivery
+
+  user-service-postgresql_db:
+    image: postgres:13
+    container_name: user-service-postgresql_db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=irmag
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=user_db
+    volumes:
+      - ./user-service/db-volume:/var/lib/postgresql/data
+    networks:
+      - user-service-t-delivery
+
+  order-service-postgresql_db:
+    image: postgres:13
+    container_name: order-service-postgresql_db
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=irmag
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=order_db
+    volumes:
+      - ./order-service/db-volume:/var/lib/postgresql/data
+    networks:
+      - order-service-t-delivery
+
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper:3.4.6
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+    networks:
+      - t-delivery
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - t-delivery
+
+networks:
+  t-delivery:
+    driver: bridge
+  auth-service-t-delivery:
+    driver: bridge
+  user-service-t-delivery:
+    driver: bridge
+  order-service-t-delivery:
+    driver: bridge

@@ -14,6 +14,8 @@ import reactor.core.publisher.Mono;
 import tdelivery.mr_irmag.gateway_service.DTO.JwtAuthenticationResponse;
 import tdelivery.mr_irmag.gateway_service.Service.JwtUtil;
 
+import java.util.UUID;
+
 @RefreshScope
 @Component
 public class AuthenticationFilter implements GatewayFilter {
@@ -44,7 +46,7 @@ public class AuthenticationFilter implements GatewayFilter {
                 return this.redirectToAuthService(exchange, chain);
             }
 
-            String email = jwtUtil.extractEmail(token);
+            String id = jwtUtil.extractID(token);
             String role = jwtUtil.extractRole(token);
             System.out.println(role + " role");
 
@@ -53,7 +55,7 @@ public class AuthenticationFilter implements GatewayFilter {
                 return exchange.getResponse().setComplete();
             }
 
-            this.updateRequest(exchange, token, email);
+            this.updateRequest(exchange, token, id);
         }
 
         return chain.filter(exchange);
@@ -68,9 +70,9 @@ public class AuthenticationFilter implements GatewayFilter {
                 .bodyToMono(JwtAuthenticationResponse.class)
                 .flatMap(response -> {
                     String token = response.getToken();
-                    String email = jwtUtil.extractEmail(token);
+                    String id = jwtUtil.extractID(token);
 
-                    this.updateRequest(exchange, token, email);
+                    this.updateRequest(exchange, token, id);
 
                     return chain.filter(exchange);
                 });
@@ -89,10 +91,10 @@ public class AuthenticationFilter implements GatewayFilter {
         return !request.getHeaders().containsKey("Authorization");
     }
 
-    private void updateRequest(ServerWebExchange exchange, String token, String email) {
+    private void updateRequest(ServerWebExchange exchange, String token, String id) {
         exchange.getRequest().mutate()
                 .header("Authorization", "Bearer " + token)
-                .header("email", email)
+                .header("id", id)
                 .build();
     }
 }
