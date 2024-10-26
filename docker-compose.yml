@@ -27,20 +27,6 @@ services:
 #      - auth-service-t-delivery
 #      - t-delivery
 
-  auth-service-postgresql-db:
-    image: postgres:13
-    container_name: auth-service-postgresql-db
-    ports:
-      - "5434:5432"
-    environment:
-      - POSTGRES_USER=irmag
-      - POSTGRES_PASSWORD=123
-      - POSTGRES_DB=auth_db
-    volumes:
-      - ./auth-service/auth-service-postgresql-db-volume:/var/lib/postgresql/data
-    networks:
-      - auth-service-t-delivery
-
   user-service-postgresql_db:
     image: postgres:13
     container_name: user-service-postgresql_db
@@ -59,7 +45,7 @@ services:
     image: postgres:13
     container_name: order-service-postgresql_db
     ports:
-      - "5435:5432"
+      - "5434:5432"
     environment:
       - POSTGRES_USER=irmag
       - POSTGRES_PASSWORD=123
@@ -100,8 +86,6 @@ services:
 
 networks:
   t-delivery:
-    driver: bridge
-  auth-service-t-delivery:
     driver: bridge
   user-service-t-delivery:
     driver: bridge

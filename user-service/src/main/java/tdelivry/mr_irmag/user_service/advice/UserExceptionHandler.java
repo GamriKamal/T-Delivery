@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import tdelivry.mr_irmag.user_service.domain.dto.ErrorResponse;
-import tdelivry.mr_irmag.user_service.exception.UserException.UserNotFoundException;
 import tdelivry.mr_irmag.user_service.exception.UserException.FieldAlreadyExistsException;
+import tdelivry.mr_irmag.user_service.exception.UserException.UserNotFoundException;
 
 import java.time.LocalDateTime;
 

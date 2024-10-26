@@ -1,14 +1,12 @@
 package tdelivery.mr_irmag.order_service.domain.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
@@ -38,6 +36,7 @@ public class Order {
     private String deliveryAddress;
 
     @Column(name = "comment")
+    @Size(max = 500)
     private String comment;
 
     @NotNull(message = "Total amount cannot be null")
@@ -51,8 +50,11 @@ public class Order {
 
     @NotBlank(message = "Email must not be empty")
     @Email(message = "Email should be valid")
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;

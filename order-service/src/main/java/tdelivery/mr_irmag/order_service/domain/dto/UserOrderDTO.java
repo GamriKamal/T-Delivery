@@ -1,0 +1,23 @@
+package tdelivery.mr_irmag.order_service.domain.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import tdelivery.mr_irmag.order_service.domain.entity.OrderStatus;
+
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserOrderDTO {
+    private String name;
+    private LocalDateTime createdDate;
+    private String deliveryAddress;
+    private String comment;
+    private Double totalAmount;
+    private OrderStatus status;
+}

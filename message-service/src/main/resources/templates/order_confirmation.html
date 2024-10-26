@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спасибо за ваш заказ!</title>
+    <style>
+        body {
+            padding: 10px 0;
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #f7f7f7;
+            margin: 0;
+            text-align: center;
+        }
+        header {
+            padding: 10px 0;
+        }
+        h1 {
+            color: #FFA500;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 200px;
+        }
+        .order-details {
+
+            background-color: #444;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+        }
+        .highlight {
+            color: #FFA500;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="cid:imageId" alt="Логотип T-Delivery"/>
+</header>
+<h1>Спасибо за ваш заказ!</h1>
+<div class="order-details">
+    <p>Ваш заказ, <span class="highlight">${name}</span>, будет доставлен по адресу: <span class="highlight">${deliveryAddress}</span>.</p>
+    <p>Комментарий: <span class="highlight">${comment}</span></p>
+    <p>Итоговая сумма: <span class="highlight">${totalAmount} тг.</span></p>
+    <p>Время приготовления: ${timeOfCooking} минут.</p>
+    <p>${orderItems}</p>
+    <p>Мы уведомим вас, как только он будет готов.</p>
+    <div class="footer">
+        <p>С уважением,<br>Ваш T-Delivery!</p>
+    </div>
+</div>
+</body>
+</html>

@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "delivery")
+@ConfigurationProperties(prefix = "tdelivery")
 @Data
 public class DeliveryConfig {
     private double basePrice;

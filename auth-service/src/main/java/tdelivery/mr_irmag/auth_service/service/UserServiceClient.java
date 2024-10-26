@@ -50,7 +50,6 @@ public class UserServiceClient {
                     String.class
             );
 
-            log.info(responseEntity.getBody());
             return mapToEntity(gson.fromJson(responseEntity.getBody(), UserDTO.class));
 
         } catch (HttpClientErrorException.NotFound e) {
@@ -79,8 +78,6 @@ public class UserServiceClient {
                 requestEntity,
                 String.class
         );
-
-        log.info("Response: " + responseEntity.getBody());
 
         return mapToEntity(gson.fromJson(responseEntity.getBody(), UserDTO.class));
     }

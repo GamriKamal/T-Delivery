@@ -33,17 +33,13 @@ public class GatewayConfig {
                 .route("auth-service", r -> r.path("/auth/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://auth-service"))
+                .route("order-service", r -> r.path("/order/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://order-service"))
+                .route("user-service", r -> r.path("/user/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://user-service"))
                 .build();
-    }
-
-    private Mono<Boolean> checkUserRole(ServerWebExchange exchange, String requiredRole) {
-        String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-            String role = jwtUtil.extractRole(token);
-            return Mono.just(requiredRole.equals(role));
-        }
-        return Mono.just(false);
     }
 
 }

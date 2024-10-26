@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import tdelivry.mr_irmag.user_service.domain.dto.UserDTO;
 import tdelivry.mr_irmag.user_service.domain.entity.Role;
 import tdelivry.mr_irmag.user_service.domain.entity.User;
-import tdelivry.mr_irmag.user_service.exception.UserException.UserNotFoundException;
 import tdelivry.mr_irmag.user_service.exception.UserException.FieldAlreadyExistsException;
 import tdelivry.mr_irmag.user_service.exception.UserException.InvalidUserDataException;
+import tdelivry.mr_irmag.user_service.exception.UserException.UserNotFoundException;
 import tdelivry.mr_irmag.user_service.repository.UserRepository;
 
 import java.util.List;

@@ -2,13 +2,13 @@ spring:
   application:
     name: order-service
   datasource:
-    url: jdbc:postgresql://localhost:5435/order_db
+    url: jdbc:postgresql://localhost:5434/order_db
     driver-class-name: org.postgresql.Driver
     username: irmag
     password: 123
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     properties:
@@ -20,15 +20,20 @@ spring:
 
 yandex:
   geocode:
-    url: https://geocode-maps.yandex.ru/1.x/?apikey=590a2a79-d575-44b6-94ab-18c164387e17&format=json&geocode=
+    url: https://geocode-maps.yandex.ru/1.x/?apikey=YOUR_TOKEN&format=json&geocode=
 
 google:
   distanceMatrix:
-    url: https://maps.googleapis.com/maps/api/distancematrix/json?&key=AIzaSyALR3HrzUsLLwY_KkIDutP8FCALjVzAdOw&mode=driving&departureTime=now&origins=43.237163,76.945654&destinations=
+    url: https://maps.googleapis.com/maps/api/distancematrix/json?&key=YOUR_TOKEN&mode=driving&departureTime=now&origins=43.237163,76.945654&destinations=
+  geocode:
+    url: https://maps.googleapis.com/maps/api/geocode/json?key=YOUR_TOKEN&address=
+
 server:
   port: 8084
 
-delivery:
+tdelivery:
   basePrice: 500.0
   distancePrice: 0.01
   timePrice: 0.5
+  userService:
+    url: http://localhost:8083/users/getUsernameAndEmailByID

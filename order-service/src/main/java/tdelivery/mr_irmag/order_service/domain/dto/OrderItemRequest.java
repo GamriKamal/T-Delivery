@@ -15,6 +15,9 @@ public class OrderItemRequest {
     @Positive(message = "Price must be a positive number")
     private Double price;
 
+    @Positive(message = "Количество должно быть положительным числом")
+    private Integer quantity;
+
     @Size(max = 500, message = "Description must not exceed 500 characters")
     private String description;
 }

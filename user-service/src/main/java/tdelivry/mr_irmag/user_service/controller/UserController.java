@@ -1,16 +1,17 @@
 package tdelivry.mr_irmag.user_service.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import tdelivry.mr_irmag.user_service.domain.dto.SignInRequest;
-import tdelivry.mr_irmag.user_service.domain.dto.UserDTO;
-import tdelivry.mr_irmag.user_service.domain.dto.UserExistenceResponse;
+import tdelivry.mr_irmag.user_service.domain.dto.*;
 import tdelivry.mr_irmag.user_service.domain.entity.User;
+import tdelivry.mr_irmag.user_service.service.OrderServiceClient;
 import tdelivry.mr_irmag.user_service.service.UserService;
 
 import java.time.LocalDateTime;
@@ -22,14 +23,10 @@ import java.util.UUID;
 @RequestMapping("/users")
 @Validated
 @Log4j2
+@RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final OrderServiceClient orderServiceClient;
 
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
@@ -51,14 +48,32 @@ public class UserController {
     }
 
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getCustomerInfo(@PathVariable UUID userId) {
-        User user = userService.getUserById(userId);
+    @GetMapping("/getuserById")
+    public ResponseEntity<User> getUserById(@RequestHeader("id") UUID id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<List<UserOrderResponse>> getUserOrder(
+            @RequestHeader("id") UUID id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        List<UserOrderResponse> list = orderServiceClient.getOrderOfUser(id, page, size);
+        log.info(list.toString());
+        return ResponseEntity.ok(list);
+    }
+
+
+    @GetMapping("/info")
+    public ResponseEntity<User> getUserInfo(@RequestHeader("id") UUID id) {
+        User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/{userName}")
-    public ResponseEntity<User> getCustomerByName(@PathVariable String userName) {
+    public ResponseEntity<User> getUserByName(@PathVariable String userName) {
         User user = userService.getUserByName(userName);
         log.info("Found user with name {}", user.toString());
         return ResponseEntity.ok(user);
@@ -84,27 +99,37 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<User> getCustomerByEmail(@PathVariable String email) {
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAllCustomers() {
+    @GetMapping("/getUsernameAndEmailByID")
+    public ResponseEntity<OrderUserDTO> getUsernameAndEmailByID(@RequestHeader("id") UUID id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(
+                OrderUserDTO.builder().
+                username(user.getUsername())
+                .email(user.getEmail())
+                .build());
+    }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<User> updateCustomer(@PathVariable UUID userId, @Valid @RequestBody User updatedCustomer) {
-        return ResponseEntity.ok(userService.updateUser(userId, updatedCustomer));
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestHeader("id") UUID id, @Valid @RequestBody User updatedCustomer) {
+        return ResponseEntity.ok(userService.updateUser(id, updatedCustomer));
     }
 
-    @PutMapping("/{userId}/address")
-    public ResponseEntity<User> updateCustomerAddress(@PathVariable UUID userId, @RequestParam String newAddress) {
-        return ResponseEntity.ok(userService.updateAddressOfUser(userId, newAddress));
+    @PutMapping("/address")
+    public ResponseEntity<User> updateUserAddress(@RequestHeader("id") UUID id, @RequestParam String newAddress) {
+        return ResponseEntity.ok(userService.updateAddressOfUser(id, newAddress));
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable UUID userId) {
+    @DeleteMapping("")
+    public ResponseEntity<Void> deleteCustomer(@RequestHeader("id") UUID userId) {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }

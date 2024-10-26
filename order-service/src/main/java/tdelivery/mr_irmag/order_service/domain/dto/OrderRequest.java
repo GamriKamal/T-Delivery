@@ -1,8 +1,13 @@
 package tdelivery.mr_irmag.order_service.domain.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -11,9 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class OrderRequest {
-    @NotBlank(message = "Customer email cannot be blank")
-    @Email(message = "Invalid email format")
-    private String customerEmail;
+    @NotBlank
+    @Size(max = 100)
+    String comment;
 
     @NotEmpty(message = "Order items cannot be empty")
     private List<@Valid OrderItemRequest> items;
