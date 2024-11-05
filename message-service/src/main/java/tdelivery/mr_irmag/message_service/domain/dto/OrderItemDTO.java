@@ -11,4 +11,5 @@ public class OrderItemDTO {
     private String name;
     private int quantity;
     private double price;
+    private String description;
 }

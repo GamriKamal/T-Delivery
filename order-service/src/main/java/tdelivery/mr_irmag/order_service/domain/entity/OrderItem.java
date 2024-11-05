@@ -5,6 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import tdelivery.mr_irmag.order_service.domain.dto.calculationDelivery.CalculateOrderItemRequest;
+import tdelivery.mr_irmag.order_service.domain.dto.messageServiceDTO.MessageOrderItemDTO;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -36,4 +41,37 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    public static List<OrderItem> from(List<CalculateOrderItemRequest> items, Order order) {
+        return items.stream()
+                .map(item -> OrderItem.builder()
+                        .name(item.getName())
+                        .price(item.getPrice())
+                        .quantity(item.getQuantity())
+                        .description(item.getDescription())
+                        .order(order)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public MessageOrderItemDTO toMessageOrderItemDTO() {
+        return MessageOrderItemDTO.builder()
+                .name(this.getName())
+                .quantity(this.getQuantity())
+                .price(this.getPrice())
+                .description(this.getDescription())
+                .build();
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", description='" + description + '\'' +
+                ", orderId=" + (order != null ? order.getId() : "null") +
+                '}';
+    }
 }

@@ -50,7 +50,27 @@ public class AuthenticationFilter implements GatewayFilter {
             String role = jwtUtil.extractRole(token);
             System.out.println(role + " role");
 
-            if (request.getURI().getPath().equals("/menu/upload-csv-file") && !role.equals("ROLE_ADMIN")) {
+            if(request.getURI().getPath().matches("/users(/.*)?")  && !role.equals("ADMIN")){
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                return exchange.getResponse().setComplete();
+            }
+            
+            if (request.getURI().getPath().matches("/menu(/.*)?") && !role.equals("ADMIN")) {
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                return exchange.getResponse().setComplete();
+            }
+
+            if(request.getURI().getPath().matches("/delivery(/.*)?") && !role.equals("ADMIN")){
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                return exchange.getResponse().setComplete();
+            }
+
+            if(request.getURI().getPath().matches("/restaurants(/.*)?") && !role.equals("ADMIN")){
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                return exchange.getResponse().setComplete();
+            }
+
+            if(request.getURI().getPath().matches("/courier(/.*)?") && !role.equals("COURIER")){
                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
             }

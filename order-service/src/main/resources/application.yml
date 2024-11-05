@@ -9,7 +9,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-      dialect: org.hibernate.dialect.PostgreSQLDialect
+      dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
     show-sql: true
     properties:
       hibernate:
@@ -17,23 +17,21 @@ spring:
   sql:
     init:
       mode: always
-
-yandex:
-  geocode:
-    url: https://geocode-maps.yandex.ru/1.x/?apikey=YOUR_TOKEN&format=json&geocode=
-
-google:
-  distanceMatrix:
-    url: https://maps.googleapis.com/maps/api/distancematrix/json?&key=YOUR_TOKEN&mode=driving&departureTime=now&origins=43.237163,76.945654&destinations=
-  geocode:
-    url: https://maps.googleapis.com/maps/api/geocode/json?key=YOUR_TOKEN&address=
-
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: order-group
+      auto-offset-reset: earliest
+  transaction:
+    default-timeout: 30s
 server:
   port: 8084
 
 tdelivery:
-  basePrice: 500.0
-  distancePrice: 0.01
-  timePrice: 0.5
   userService:
     url: http://localhost:8083/users/getUsernameAndEmailByID
+  messageService:
+    url: http://localhost:8085/message/sendMessage
+    topic: order-message
+  route-service:
+    url: http://localhost:8087/delivery/calculate

@@ -23,12 +23,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public User createUser(UserDTO userDTO) {
-        var user = mapToEntity(userDTO);
+        var user = User.of(userDTO);
 
-        checkNameExists(user.getUsername());
-        checkEmailExists(user.getEmail());
+        checkFieldExistence("username", user.getUsername());
+        checkFieldExistence("email", user.getEmail());
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
+
         return userRepository.save(user);
     }
 
@@ -47,46 +49,35 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
 
-    public User existUserByNameOrEmail(UserDTO userDTO) {
-        String username = userDTO.getUsername();
-        String email = userDTO.getEmail();
-
-        Optional<User> userByName = userRepository.findByUsername(username);
-
-        if (userByName.isPresent()) {
-            return userByName.get();
-        }
-
-        Optional<User> userByEmail = userRepository.findByEmail(email);
-
-        if (userByEmail.isPresent()) {
-            return userByEmail.get();
-        }
-
-        return null;
+    public User findExistingUser(UserDTO userDTO) {
+        return userRepository.findByUsername(userDTO.getUsername())
+                .or(() -> userRepository.findByEmail(userDTO.getEmail()))
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + userDTO.getUsername() + " or email: " + userDTO.getEmail()));
     }
 
-    public List<User> getAllUser() {
+
+
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     public User updateAddressOfUser(UUID id, String newAddress) {
-        if (newAddress == null || newAddress.isEmpty()) {
-            throw new InvalidUserDataException("The new address is null or empty!");
-        }
+        validateAddress(newAddress);
 
-        User existingUser = getUserById(id);
+        var existingUser = getUserById(id);
         existingUser.setAddress(newAddress);
+
         return userRepository.save(existingUser);
     }
 
     public User updateUser(UUID id, @Valid User updatedUser) {
-        checkEmailExists(updatedUser.getEmail());
+        checkFieldExistence("email", updatedUser.getEmail());
 
-        User existingUser = getUserById(id);
+        var existingUser = getUserById(id);
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setAddress(updatedUser.getAddress());
+
         return userRepository.save(existingUser);
     }
 
@@ -97,43 +88,25 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    private void checkEmailExists(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new FieldAlreadyExistsException("Email already exists: " + email);
+    private void checkFieldExistence(String field, String value) {
+        var exists = switch (field) {
+            case "username" -> userRepository.findByUsername(value).isPresent();
+            case "email" -> userRepository.findByEmail(value).isPresent();
+            default -> false;
+        };
+
+        if (exists) {
+            throw new FieldAlreadyExistsException(field + " already exists: " + value);
         }
     }
 
-    private void checkNameExists(String name) {
-        if (userRepository.findByUsername(name).isPresent()) {
-            throw new FieldAlreadyExistsException("Name already exists: " + name);
+    private void validateAddress(String address) {
+        if (address == null || address.isEmpty()) {
+            throw new InvalidUserDataException("The new address is null or empty!");
         }
-    }
-
-    public User mapToEntity(UserDTO userDTO) {
-        return User.builder()
-                .id(userDTO.getId())
-                .username(userDTO.getUsername())
-                .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
-                .role(userDTO.getRole())
-                .address(userDTO.getAddress())
-                .build();
-    }
-
-    public UserDTO mapToDTO(User user) {
-        return UserDTO.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(user.getRole())
-                .address(user.getAddress())
-                .build();
     }
 
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
-
-
 }

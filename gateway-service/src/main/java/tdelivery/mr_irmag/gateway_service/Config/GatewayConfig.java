@@ -13,20 +13,14 @@ import tdelivery.mr_irmag.gateway_service.Service.JwtUtil;
 public class GatewayConfig {
     private AuthenticationFilter filter;
 
-    private JwtUtil jwtUtil;
-
     @Autowired
-    public GatewayConfig(AuthenticationFilter filter, JwtUtil jwtUtil) {
+    public GatewayConfig(AuthenticationFilter filter) {
         this.filter = filter;
-        this.jwtUtil = jwtUtil;
     }
 
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("menu-service", r -> r.path("/menu/upload-csv-file")
-                        .filters(f -> f.filter(filter))
-                        .uri("lb://menu-service/"))
                 .route("menu-service", r -> r.path("/menu/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://menu-service/"))
@@ -36,9 +30,27 @@ public class GatewayConfig {
                 .route("order-service", r -> r.path("/order/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://order-service"))
+                .route("order-service", r -> r.path("/ws/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://order-service"))
+                .route("order-service", r -> r.path("/progress/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://order-service"))
                 .route("user-service", r -> r.path("/user/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://user-service"))
+                .route("route-service", r -> r.path("/delivery/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://route-service"))
+                .route("route-service", r -> r.path("/restaurants/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://route-service"))
+                .route("courier-service", r -> r.path("/courier/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://courier-service"))
+                .route("message-service", r -> r.path("/message/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://message-service"))
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package tdelivery.mr_irmag.order_service.service;
+package tdelivery.mr_irmag.message_service.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -8,8 +8,10 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import tdelivery.mr_irmag.message_service.domain.dto.CourierMessageDto;
 import tdelivery.mr_irmag.message_service.domain.dto.OrderDTO;
 import tdelivery.mr_irmag.message_service.domain.dto.OrderItemDTO;
+import tdelivery.mr_irmag.message_service.domain.dto.UserMessageRequestDTO;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -26,16 +28,111 @@ public class EmailSenderService {
 
     private final JavaMailSender mailSender;
 
-    public void sendEmail(String to, OrderDTO order, int timeOfCooking) {
+    public boolean sendPaidStatusMessage(UserMessageRequestDTO request) {
         String subject = "Ваш заказ принят!";
-        String htmlContent = loadHtmlTemplate(order, timeOfCooking);
+        String htmlContent = loadHtmlTemplate(request.getOrder(), request.getTimeOfCooking());
 
         try {
-            sendHtmlEmail(to, subject, htmlContent);
+            sendHtmlEmail(request.getEmail(), subject, htmlContent);
         } catch (MessagingException e) {
             log.error("Ошибка при отправке письма", e);
+            return false;
+        }
+        return true;
+    }
+
+    public void sendShippedStatusMessage(UserMessageRequestDTO request) {
+        String subject = "Ваш заказ готов и мы ищем курьера!";
+        String htmlContent = loadHtmlTemplateForReadyOrder(request.getOrder());
+
+        try {
+            sendHtmlEmail(request.getEmail(), subject, htmlContent);
+        } catch (MessagingException e) {
+            log.error("Ошибка при отправке сообщения о готовности заказа", e);
         }
     }
+
+    public void sendCourierPickupMessage(CourierMessageDto request) {
+        String subject = "Ваш заказ уже на пути!";
+        String htmlContent = loadHtmlTemplateForOrderStatusUpdate(request);
+
+        try {
+            sendHtmlEmail(request.getEmail(), subject, htmlContent);
+        } catch (MessagingException e) {
+            log.error("Ошибка при отправке сообщения о взятии заказа курьером", e);
+        }
+    }
+
+    public boolean sendOrderDeliveredMessage(CourierMessageDto request) {
+        String subject = "Ваш заказ доставлен!";
+        String htmlContent = loadHtmlTemplateForDelivery();
+
+        try {
+            sendHtmlEmail(request.getEmail(), subject, htmlContent);
+        } catch (MessagingException e) {
+            log.error("Ошибка при отправке письма о доставке заказа", e);
+            return false;
+        }
+        return true;
+    }
+
+    private String loadHtmlTemplateForOrderStatusUpdate(CourierMessageDto messageRequest) {
+        InputStream inputStream = loadResourceAsStream("templates/order_status_update.html");
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.replace("${timeOfDelivery}", messageRequest.getTimeOfDelivery())
+                        .replace("${restaurantAddress}", messageRequest.getRestaurantAddress())
+                        .replace("${email}", "tdelivery@gmail.com");
+
+                htmlBuilder.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка при загрузке HTML шаблона для обновления статуса заказа", e);
+        }
+
+        return htmlBuilder.toString();
+    }
+
+    private String loadHtmlTemplateForDelivery() {
+        InputStream inputStream = loadResourceAsStream("templates/order_delivered.html");
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                htmlBuilder.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Ошибка при загрузке HTML шаблона для уведомления о доставке заказа", e);
+        }
+
+        return htmlBuilder.toString();
+    }
+
+
+    private String loadHtmlTemplateForReadyOrder(OrderDTO order) {
+        InputStream inputStream = loadResourceAsStream("templates/order_ready.html");
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.replace("${name}", order.getName())
+                        .replace("${deliveryAddress}", order.getDeliveryAddress())
+                        .replace("${totalAmount}", String.valueOf(order.getTotalAmount()));
+
+                htmlBuilder.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return htmlBuilder.toString();
+    }
+
 
     private void sendHtmlEmail(String to, String subject, String htmlContent) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();

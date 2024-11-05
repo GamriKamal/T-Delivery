@@ -27,6 +27,8 @@ services:
 #      - auth-service-t-delivery
 #      - t-delivery
 
+
+
   user-service-postgresql_db:
     image: postgres:13
     container_name: user-service-postgresql_db
@@ -42,7 +44,7 @@ services:
       - user-service-t-delivery
 
   order-service-postgresql_db:
-    image: postgres:13
+    image: postgis/postgis:14-3.3
     container_name: order-service-postgresql_db
     ports:
       - "5434:5432"
@@ -54,6 +56,20 @@ services:
       - ./order-service/db-volume:/var/lib/postgresql/data
     networks:
       - order-service-t-delivery
+
+  route-service-postgresql_db:
+    image: postgres:13
+    container_name: route-service-postgresql_db
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=irmag
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=routes_db
+    volumes:
+      - ./route-service/db-volume:/var/lib/postgresql/data
+    networks:
+      - route-service-t-delivery
 
   zookeeper:
     container_name: zookeeper
@@ -71,7 +87,6 @@ services:
     container_name: kafka
     image: confluentinc/cp-kafka
     ports:
-      - "9092:9092"
       - "29092:29092"
     depends_on:
       - zookeeper
@@ -87,7 +102,11 @@ services:
 networks:
   t-delivery:
     driver: bridge
+  auth-service-t-delivery:
+    driver: bridge
   user-service-t-delivery:
     driver: bridge
   order-service-t-delivery:
+    driver: bridge
+  route-service-t-delivery:
     driver: bridge

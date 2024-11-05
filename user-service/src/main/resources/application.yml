@@ -39,6 +39,5 @@ tdelivery:
     url: http://localhost:8084/order/getUserOrder
 
 
-
 server:
   port: 8083

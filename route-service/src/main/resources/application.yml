@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: route-service
+  datasource:
+    #    url: jdbc:postgresql://postgresql_db:5432/auth_db
+    url: jdbc:postgresql://localhost:5435/routes_db
+    driver-class-name: org.postgresql.Driver
+    username: irmag
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: always
+
+google:
+  distanceMatrix:
+    url: https://maps.googleapis.com/maps/api/distancematrix/json?
+  geocode:
+    url: https://maps.googleapis.com/maps/api/geocode/json?key=YOUR API KEY&address=
+  googlemaps:
+    api_key: YOUR API KEY
+
+tdelivery:
+  basePrice: 500.0
+  distancePrice: 0.01
+  timePrice: 0.5
+
+server:
+  port: 8087

@@ -12,14 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderDTO {
-
     private String name;
-
     private String deliveryAddress;
-
     private String comment;
-
     private Double totalAmount;
-
     private List<OrderItemDTO> orderItems;
 }

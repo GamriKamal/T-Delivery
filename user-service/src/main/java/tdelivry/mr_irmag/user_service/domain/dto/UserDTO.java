@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import tdelivry.mr_irmag.user_service.domain.entity.Role;
+import tdelivry.mr_irmag.user_service.domain.entity.User;
 
 import java.util.UUID;
 
@@ -34,5 +35,16 @@ public class UserDTO {
 
     @Size(max = 255, message = "Address can be at most 255 characters")
     private String address;
+
+    public static UserDTO of(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .address(user.getAddress())
+                .build();
+    }
 }
 
