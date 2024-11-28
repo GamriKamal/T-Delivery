@@ -29,7 +29,6 @@ public class RestaurantService {
         if (restaurantRepository.findByRestaurantName(restaurant.getRestaurantName()).isPresent()) {
             throw new RestaurantAlreadyExistsException(restaurant.getRestaurantName());
         }
-        validateAddress(restaurant.getAddress());
         return restaurantRepository.save(restaurant);
     }
 
@@ -45,12 +44,10 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
 
-        if (!restaurant.getRestaurantName().equals(restaurantDetails.getRestaurantName()) &&
+        if (restaurant.getRestaurantName().equals(restaurantDetails.getRestaurantName()) &&
                 restaurantRepository.findByRestaurantName(restaurantDetails.getRestaurantName()).isPresent()) {
             throw new RestaurantAlreadyExistsException(restaurantDetails.getRestaurantName());
         }
-
-        validateAddress(restaurantDetails.getAddress());
 
         restaurant.setRestaurantName(restaurantDetails.getRestaurantName());
         restaurant.setAddress(restaurantDetails.getAddress());
@@ -62,15 +59,4 @@ public class RestaurantService {
         restaurantRepository.deleteById(id);
     }
 
-    private void validateAddress(Address address) {
-        if (address == null) {
-            throw new InvalidAddressException("Address must not be null.");
-        }
-        if (address.getStreet() == null || address.getStreet().isBlank()) {
-            throw new InvalidAddressException("Street must not be empty.");
-        }
-        if (Double.isNaN(address.getX()) || Double.isNaN(address.getY())) {
-            throw new InvalidAddressException("Coordinates must be valid numbers.");
-        }
-    }
 }

@@ -15,10 +15,11 @@ public class CalculationDeliveryResponse {
     private Double totalPrice;
     private Double productPrice;
     private Double deliveryPrice;
-    private String deliveryDuration;
+    private Integer deliveryDuration;
     private String restaurantName;
     private String restaurantAddress;
     private Point restaurantCoordinates;
+    private Point userPoint;
 
     public static CalculationDeliveryResponse toCalculationDeliveryResponse(RouteServiceResponse routeServiceResponse) {
         return CalculationDeliveryResponse.builder()
@@ -27,6 +28,7 @@ public class CalculationDeliveryResponse {
                 .restaurantName(routeServiceResponse.getRestaurantName())
                 .restaurantAddress(routeServiceResponse.getRestaurantAddress())
                 .restaurantCoordinates(routeServiceResponse.getRestaurantCoordinates())
+                .userPoint(routeServiceResponse.getUserPoint())
                 .build();
     }
 }

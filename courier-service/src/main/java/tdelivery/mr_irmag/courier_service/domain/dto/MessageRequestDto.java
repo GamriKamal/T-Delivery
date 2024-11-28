@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tdelivery.mr_irmag.courier_service.domain.entity.OrderStatus;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +15,7 @@ public class MessageRequestDto {
     private String email;
     private String restaurantAddress;
 
-    public String changeTime(){
+    public String changeTime() {
         String[] parts = this.timeOfDelivery.split(" ");
         int originalMinutes = Integer.parseInt(parts[0]);
 
@@ -25,7 +24,7 @@ public class MessageRequestDto {
         return originalMinutes + "-" + multipliedMinutes + " минут";
     }
 
-    public int getTime(){
+    public int getTime() {
         String[] parts = this.timeOfDelivery.split("-");
         return Integer.parseInt(parts[0].trim());
     }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import tdelivery.mr_irmag.courier_service.domain.dto.ProcessCourierOrderRequest;
 import tdelivery.mr_irmag.courier_service.domain.dto.findNearestOrder.NearestOrderRequestDto;
 import tdelivery.mr_irmag.courier_service.domain.entity.Order;
 import tdelivery.mr_irmag.courier_service.domain.entity.OrderStatus;
@@ -18,14 +19,12 @@ import java.util.UUID;
 @Service
 @Log4j2
 public class OrderServiceClient {
-    @Value("${tdelivery.order-service.url}")
-    private String orderServiceUrl;
-
-    @Value("${tdelivery.order-service.changeStatusUrl}")
-    private String changeStatusUrl;
-
     private final RestTemplate restTemplate;
     private final Gson gson;
+    @Value("${tdelivery.order-service.url}")
+    private String orderServiceUrl;
+    @Value("${tdelivery.order-service.changeStatusUrl}")
+    private String changeStatusUrl;
 
     @Autowired
     public OrderServiceClient(RestTemplate restTemplate, Gson gson) {
@@ -46,16 +45,22 @@ public class OrderServiceClient {
                 String.class
         );
 
+        if (responseEntity == null || responseEntity.getBody() == null) {
+            log.warn("Received null response or empty body from order service");
+            return List.of();
+        }
+
         log.info(responseEntity.getBody());
-        return gson.fromJson(responseEntity.getBody(), new TypeToken<List<Order>>() {});
+        return gson.fromJson(responseEntity.getBody(), new TypeToken<List<Order>>() {
+        }.getType());
     }
 
-    public HttpStatusCode changeStatusOfrOrder(UUID orderId, OrderStatus status){
+    public HttpStatusCode changeStatusOfOrder(ProcessCourierOrderRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
-        headers.set("id", orderId.toString());
+        headers.set("id", request.getOrderId().toString());
 
-        HttpEntity<String> requestEntity = new HttpEntity<>(status.toString(), headers);
+        HttpEntity<ProcessCourierOrderRequest> requestEntity = new HttpEntity<>(request, headers);
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 changeStatusUrl,
@@ -63,6 +68,11 @@ public class OrderServiceClient {
                 requestEntity,
                 String.class
         );
+
+        if (responseEntity == null) {
+            log.warn("Received null response when attempting to change order status");
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
 
         return responseEntity.getStatusCode();
     }

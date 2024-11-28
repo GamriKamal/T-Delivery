@@ -1,5 +1,8 @@
 package tdelivery.mr_irmag.order_service.exception;
 
+import lombok.ToString;
+
+@ToString(callSuper = true)
 public class UserServiceClientException extends RuntimeException {
   private final String userId;
 
@@ -12,9 +15,5 @@ public class UserServiceClientException extends RuntimeException {
     return userId;
   }
 
-  @Override
-  public String toString() {
-    return String.format("UserServiceClientException: userId=%s, message=%s", userId, getMessage());
-  }
 }
 

@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.5"
 	id("io.spring.dependency-management") version "1.1.6"
+	jacoco
 }
 
 group = "tdelivery.mr_irmag"
@@ -36,6 +37,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation("org.testcontainers:kafka:1.17.6")
+	testImplementation("org.testcontainers:junit-jupiter:1.18.3")
 }
 
 dependencyManagement {
@@ -46,4 +49,32 @@ dependencyManagement {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+}
+
+jacoco {
+	toolVersion = "0.8.12"
+	reportsDirectory = layout.buildDirectory.dir("reports/jacoco")
+}
+
+tasks.jacocoTestReport {
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+	}
+
+	classDirectories.setFrom(files(classDirectories.files.map {
+		fileTree(it).apply {
+			exclude("tdelivery/mr_irmag/message_service/domain/**")
+		}
+	}))
 }

@@ -1,5 +1,6 @@
 package tdelivery.mr_irmag.auth_service.advice;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,39 +9,97 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.context.request.WebRequest;
-import tdelivery.mr_irmag.auth_service.exceptions.UserNotFoundException;
+import tdelivery.mr_irmag.auth_service.domain.dto.ErrorResponse;
+import tdelivery.mr_irmag.auth_service.exceptions.*;
+
+import java.time.LocalDateTime;
 
 @ControllerAdvice
+@Order(1)
 public class GlobalExceptionHandler {
+    private ErrorResponse buildErrorResponse(HttpStatus status, String message) {
+        return ErrorResponse.builder()
+                .errorCode(status.value())
+                .timestamp(LocalDateTime.now())
+                .message(message)
+                .build();
+    }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
-        return new ResponseEntity<>("Error: " + ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponse response = buildErrorResponse(status, "Error: " + ex.getMessage());
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(FieldAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleFieldAlreadyExistsException(FieldAlreadyExistsException ex) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        ErrorResponse response = buildErrorResponse(status, "Error: " + ex.getMessage());
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRequestException(InvalidRequestException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse response = buildErrorResponse(status, ex.getMessage());
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(ServerException.class)
+    public ResponseEntity<ErrorResponse> handleServerException(ServerException ex) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorResponse response = buildErrorResponse(status, ex.getMessage());
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleServiceUnavailableException(ServiceUnavailableException ex) {
+        HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
+        ErrorResponse response = buildErrorResponse(status, ex.getMessage());
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(UnexpectedErrorException.class)
+    public ResponseEntity<ErrorResponse> handleUnexpectedErrorException(UnexpectedErrorException ex) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorResponse response = buildErrorResponse(status, ex.getMessage());
+        return new ResponseEntity<>(response, status);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
-        return new ResponseEntity<>("Invalid request: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse response = buildErrorResponse(status, "Invalid request: " + ex.getMessage());
+        return new ResponseEntity<>(response, status);
     }
 
     @ExceptionHandler(HttpClientErrorException.BadRequest.class)
-    public ResponseEntity<String> handleBadRequestException(HttpClientErrorException.BadRequest ex, WebRequest request) {
-        return new ResponseEntity<>("Bad Request: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleBadRequestException(HttpClientErrorException.BadRequest ex, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse response = buildErrorResponse(status, "Bad Request: " + ex.getMessage());
+        return new ResponseEntity<>(response, status);
     }
 
     @ExceptionHandler(HttpServerErrorException.class)
-    public ResponseEntity<String> handleServerErrorException(HttpServerErrorException ex, WebRequest request) {
-        return new ResponseEntity<>("Server error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponse> handleServerErrorException(HttpServerErrorException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorResponse response = buildErrorResponse(status, "Server error: " + ex.getMessage());
+        return new ResponseEntity<>(response, status);
     }
 
     @ExceptionHandler(ResourceAccessException.class)
-    public ResponseEntity<String> handleResourceAccessException(ResourceAccessException ex, WebRequest request) {
-        return new ResponseEntity<>("Service unavailable: " + ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+    public ResponseEntity<ErrorResponse> handleResourceAccessException(ResourceAccessException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
+        ErrorResponse response = buildErrorResponse(status, "Service unavailable: " + ex.getMessage());
+        return new ResponseEntity<>(response, status);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGlobalException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>("An error occurred: " + ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorResponse response = buildErrorResponse(status, "An error occurred: " + ex.getLocalizedMessage());
+        return new ResponseEntity<>(response, status);
     }
 }
 

@@ -162,8 +162,8 @@
 						</goals>
 						<configuration>
 							<excludes>
-								<exclude>tdelivery.mr_irmag.auth_service.Domain/**</exclude>
-								<exclude>tdelivery.mr_irmag.auth_service.Config/**</exclude>
+								<exclude>tdelivery/mr_irmag/auth_service/domain/**</exclude>
+								<exclude>tdelivery/mr_irmag/auth_service/config/**</exclude>
 							</excludes>
 						</configuration>
 					</execution>

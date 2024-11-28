@@ -27,7 +27,8 @@ public class CacheConfig extends CachingConfigurerSupport {
 
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("totalAmountCache", "coordinatesCache", "restaurantAddress") {
+        return new ConcurrentMapCacheManager("totalAmountCache", "restaurantCoordinatesCache",
+                "restaurantAddress", "deliveryTime", "userCoordinatesCache") {
             @Override
             protected Cache createConcurrentMapCache(final String name) {
                 return new ConcurrentMapCache(name, CacheBuilder.newBuilder()

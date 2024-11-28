@@ -1,10 +1,6 @@
 package tdelivery.mr_irmag.courier_service.domain.dto.findNearestOrder;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.*;
 import tdelivery.mr_irmag.courier_service.domain.dto.Point;
 import tdelivery.mr_irmag.courier_service.domain.entity.Order;
 

@@ -45,7 +45,10 @@ public class Order {
     private String deliveryAddress;
 
     @Column(columnDefinition = "geometry(Point,4326)", nullable = false)
-    private Point position;
+    private Point restaurantCoordinates;
+
+    @Column(columnDefinition = "geometry(Point,4326)", nullable = false)
+    private Point userCoordinates;
 
     private static final GeometryFactory geometryFactory = new GeometryFactory();
 
@@ -60,6 +63,8 @@ public class Order {
 
     @Column(name = "restaurant_address", nullable = false)
     private String restaurantAddress;
+
+    private Integer timeOfDelivery;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -76,12 +81,23 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;
 
+    public Order(OrderStatus status) {
+        this.status = status;
+    }
+
     public static Order from(UUID userId, CalculateOrderRequest request, UserInfoResponseDTO userDTO,
-                             Double totalAmount, org.springframework.data.geo.Point point, String restaurantAddress) {
-        Point position = geometryFactory.createPoint(new Coordinate(
-                point.getX(),
-                point.getY()
+                             Double totalAmount, org.springframework.data.geo.Point restaurantCoordinates,
+                             org.springframework.data.geo.Point userCoordinates, String restaurantAddress, Integer timeOfDelivery) {
+        Point restaurantPosition = geometryFactory.createPoint(new Coordinate(
+                restaurantCoordinates.getX(),
+                restaurantCoordinates.getY()
         ));
+
+        Point userPosition = geometryFactory.createPoint(new Coordinate(
+                userCoordinates.getX(),
+                userCoordinates.getY()
+        ));
+
 
         return Order.builder()
                 .name(request.getItems().stream()
@@ -94,8 +110,10 @@ public class Order {
                 .status(OrderStatus.PAID)
                 .userId(userId)
                 .email(userDTO.getEmail())
-                .position(position)
+                .restaurantCoordinates(restaurantPosition)
+                .userCoordinates(userPosition)
                 .restaurantAddress(restaurantAddress)
+                .timeOfDelivery(timeOfDelivery)
                 .build();
     }
 
@@ -121,5 +139,13 @@ public class Order {
                 .status(this.getStatus())
                 .build();
 
+    }
+
+    public void setRestaurantCoordinates(double x, double y) {
+        this.restaurantCoordinates = geometryFactory.createPoint(new Coordinate(x, y));
+    }
+
+    public void setUserCoordinates(double x, double y) {
+        this.userCoordinates = geometryFactory.createPoint(new Coordinate(x, y));
     }
 }

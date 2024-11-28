@@ -1,39 +1,22 @@
 spring:
   application:
     name: auth-service
-  datasource:
-#    url: jdbc:postgresql://postgresql_db:5432/auth_db
-    url: jdbc:postgresql://localhost:5434/auth_db
-    driver-class-name: org.postgresql.Driver
-    username: irmag
-    password: 123
-  jpa:
-    hibernate:
-      ddl-auto: update
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-  sql:
-    init:
-      mode: always
 
 cloud:
   eureka:
     client:
       service-url:
-        defaultZone: http://localhost:8761/eureka/
+        defaultZone: http://discovery-service:8761/eureka/
       register-with-eureka: true
       fetch-registry: true
 
 token:
   signing:
-    key: "YOUR SIGNING KEY"
+    key: bXlT3cQ7GQ9PTeRHz0kF8FlqKuoZQzP4Vbq4YlU1sjI=
 
 tdelivery:
   user-service:
-    url: http://localhost:8083/users
+    url: http://user-service:8083/users
 
 server:
   port: 8081

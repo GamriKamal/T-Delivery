@@ -10,23 +10,17 @@ import tdelivery.mr_irmag.courier_service.domain.dto.MessageRequestDto;
 import tdelivery.mr_irmag.courier_service.exception.MessageEmptyException;
 import tdelivery.mr_irmag.courier_service.kafka.KafkaProducerService;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class MessageServiceClient {
+    private final KafkaProducerService kafkaProducerService;
+    private final Gson gson;
     @Value("${tdelivery.message-topic}")
     private String messageServiceTopic;
 
-    private final KafkaProducerService kafkaProducerService;
-    private final Gson gson;
-
     public void sendEmail(MessageRequestDto message) {
-        if(message == null){
+        if (message == null) {
             log.error("Provided order for sending message is null!");
             throw new MessageEmptyException("Provided message for sending message is null!");
         }
@@ -38,7 +32,7 @@ public class MessageServiceClient {
     }
 
 
-    public void sendKafkaMessage(String topic, KafkaDelayedMessageDTO message){
+    public void sendKafkaMessage(String topic, KafkaDelayedMessageDTO message) {
         kafkaProducerService.sendMessage(topic, gson.toJson(message));
     }
 

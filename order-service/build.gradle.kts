@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.4"
 	id("io.spring.dependency-management") version "1.1.6"
+	jacoco
 }
 
 group = "tdelivery.mr_irmag"
@@ -42,8 +43,12 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
+	testImplementation("junit:junit:4.12")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
+	testImplementation("org.testcontainers:junit-jupiter:1.18.3")
+	testImplementation("org.testcontainers:kafka:1.17.6")
+	testImplementation("org.testcontainers:postgresql:1.20.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -55,4 +60,36 @@ dependencyManagement {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+}
+
+jacoco {
+	toolVersion = "0.8.12"
+	reportsDirectory = layout.buildDirectory.dir("reports/jacoco")
+}
+
+tasks.jacocoTestReport {
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+	}
+
+	classDirectories.setFrom(files(classDirectories.files.map {
+		fileTree(it).apply {
+			exclude("tdelivery/mr_irmag/order_service/domain/**")
+			exclude("tdelivery/mr_irmag/order_service/config/**")
+			exclude("tdelivery/mr_irmag/order_service/kafka/**")
+			exclude("tdelivery/mr_irmag/order_service/service/WebSocketDeliveryStatusService.class")
+		}
+
+
+	}))
 }

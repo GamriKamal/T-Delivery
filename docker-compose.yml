@@ -1,32 +1,127 @@
 version: '3.8'
 services:
-#  discovery-service:
-#    build:
-#      context: ./discovery-service
-#      dockerfile: Dockerfile
-#    container_name: discovery-service
-#    ports:
-#      - "8761:8761"
-#    networks:
-#      - t-delivery
-#
-#  auth-service:
-#    build:
-#      context: ./auth-service
-#      dockerfile: Dockerfile
-#    container_name: auth-service
-#    environment:
-#      - DB_URL=jdbc:postgresql://postgres_db:5432/auth_db
-#      - DB_USERNAME=irmag
-#      - DB_PASSWORD=123
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - auth-service-postgresql-db
-#    networks:
-#      - auth-service-t-delivery
-#      - t-delivery
+  discovery-service:
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - t-delivery
 
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    networks:
+      - t-delivery
+    depends_on:
+      - discovery-service
+
+  menu-service:
+    build:
+      context: ./menu-service
+      dockerfile: Dockerfile
+    container_name: menu-service
+    ports:
+      - "8082:8082"
+    networks:
+      - t-delivery
+      - menu-service-t-delivery
+    depends_on:
+      - menu-service-mongodb
+      - discovery-service
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8083:8083"
+    networks:
+      - t-delivery
+      - user-service-t-delivery
+    depends_on:
+      - user-service-postgresql_db
+      - discovery-service
+
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    container_name: order-service
+    ports:
+      - "8084:8084"
+    networks:
+      - t-delivery
+      - order-service-t-delivery
+    depends_on:
+      - order-service-postgresql_db
+      - discovery-service
+
+  message-service:
+    build:
+      context: ./message-service
+      dockerfile: Dockerfile
+    container_name: message-service
+    ports:
+      - "8085:8085"
+    networks:
+      - t-delivery
+    depends_on:
+      - order-service
+      - courier-service
+      - discovery-service
+
+  courier-service:
+    build:
+      context: ./courier-service
+      dockerfile: Dockerfile
+    container_name: courier-service
+    ports:
+      - "8086:8086"
+    networks:
+      - t-delivery
+    depends_on:
+      - discovery-service
+
+  route-service:
+    build:
+      context: ./route-service
+      dockerfile: Dockerfile
+    container_name: route-service
+    ports:
+      - "8087:8087"
+    networks:
+      - t-delivery
+      - route-service-t-delivery
+    depends_on:
+      - route-service-postgresql_db
+      - discovery-service
+
+  gateway-service:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    container_name: gateway-service
+    ports:
+      - "8000:8000"
+    networks:
+      - t-delivery
+    depends_on:
+      - auth-service
+      - menu-service
+      - user-service
+      - order-service
+      - message-service
+      - route-service
+      - courier-service
+      - discovery-service
 
 
   user-service-postgresql_db:
@@ -71,6 +166,16 @@ services:
     networks:
       - route-service-t-delivery
 
+  menu-service-mongodb:
+    image: mongo:latest
+    container_name: menu-service-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./menu-service/mongodb-storage:/data/db
+    networks:
+      - menu-service-t-delivery
+
   zookeeper:
     container_name: zookeeper
     image: wurstmeister/zookeeper:3.4.6
@@ -102,9 +207,9 @@ services:
 networks:
   t-delivery:
     driver: bridge
-  auth-service-t-delivery:
-    driver: bridge
   user-service-t-delivery:
+    driver: bridge
+  menu-service-t-delivery:
     driver: bridge
   order-service-t-delivery:
     driver: bridge

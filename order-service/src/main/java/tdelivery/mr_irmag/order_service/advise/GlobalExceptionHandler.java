@@ -1,6 +1,7 @@
 package tdelivery.mr_irmag.order_service.advise;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Log4j2
 @ControllerAdvice
+@Order(3)
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserServiceClientException.class)

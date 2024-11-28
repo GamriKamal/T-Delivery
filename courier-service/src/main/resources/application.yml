@@ -2,7 +2,7 @@ spring:
   application:
     name: courier-service
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: kafka:29092
     consumer:
       group-id: order-group
       auto-offset-reset: earliest
@@ -13,7 +13,7 @@ server:
 tdelivery:
   message-topic: courier-topic
   order-service:
-    url: http://localhost:8084/order/nearestOrder
-    changeStatusUrl: http://localhost:8084/order/changeStatus
+    url: http://order-service:8084/order/nearestOrder
+    changeStatusUrl: http://order-service:8084/order/courier/takeOrder
   route-service:
-    url: http://localhost:8087/delivery/closestOrder
+    url: http://route-service:8087/delivery/closestOrder

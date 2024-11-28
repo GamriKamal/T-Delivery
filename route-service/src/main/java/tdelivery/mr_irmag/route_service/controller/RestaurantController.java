@@ -1,5 +1,6 @@
 package tdelivery.mr_irmag.route_service.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/restaurants")
-@RequiredArgsConstructor
 public class RestaurantController {
 
     private RestaurantService restaurantService;
+
+    @Autowired
+    public void setRestaurantService(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
+    }
 
     @PostMapping
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant) {
@@ -37,7 +42,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable UUID id, @RequestBody Restaurant restaurantDetails) {
+    public ResponseEntity<Restaurant> updateRestaurant(@Valid @PathVariable UUID id, @RequestBody Restaurant restaurantDetails) {
         Restaurant updatedRestaurant = restaurantService.updateRestaurant(id, restaurantDetails);
         return ResponseEntity.ok(updatedRestaurant);
     }

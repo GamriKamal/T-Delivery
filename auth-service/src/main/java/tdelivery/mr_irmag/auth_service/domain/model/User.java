@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import tdelivery.mr_irmag.auth_service.domain.dto.UserDTO;
 
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class User {
 
     private UUID id;
@@ -34,6 +36,17 @@ public class User {
 
     @Size(max = 255, message = "Address can be at most 255 characters")
     private String address;
+
+    public static User of(UserDTO userDTO) {
+        return User.builder()
+                .id(userDTO.getId())
+                .username(userDTO.getUsername())
+                .email(userDTO.getEmail())
+                .password(userDTO.getPassword())
+                .role(userDTO.getRole())
+                .address(userDTO.getAddress())
+                .build();
+    }
 }
 
 

@@ -1,11 +1,8 @@
 package tdelivery.mr_irmag.courier_service.domain.entity;
 
-import jakarta.validation.constraints.*;
 import lombok.*;
 import tdelivery.mr_irmag.courier_service.domain.dto.Point;
 
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +23,13 @@ public class Order {
     private Double totalAmount;
     private String restaurantAddress;
     private Point location;
+    private Integer timeOfDelivery;
     private List<OrderItem> items;
 
+    public Order(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
 
 

@@ -21,7 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Page<Order> findAllOrderByUserId(@Param("userId") UUID userId, Pageable pageable);
 
     @Query(value = "SELECT * FROM orders o " +
-            "WHERE ST_Distance(o.position::geography, ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography) <= :radius " +
+            "WHERE ST_Distance(o.restaurant_coordinates::geography, ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography) <= :radius " +
             "AND o.status = 'PREPARED' " +
             "LIMIT :limit",
             nativeQuery = true)

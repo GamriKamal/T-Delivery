@@ -29,7 +29,6 @@ public class UserController {
     private final UserService userService;
     private final OrderServiceClient orderServiceClient;
 
-
     @PostMapping
     @Operation(summary = "Создание пользователя", description = "Создает нового пользователя с указанными данными")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
@@ -106,8 +105,8 @@ public class UserController {
         var user = userService.findExistingUser(userDTO);
 
         var message = (user != null && user.getEmail().equalsIgnoreCase(userDTO.getEmail()))
-                ? "Пользователь существует с указанным email: " + userDTO.getEmail()
-                : "Пользователь существует с указанным именем: " + userDTO.getUsername();
+                ? "The user exists with the specified email address: " + userDTO.getEmail()
+                : "The user exists with the specified name: " + userDTO.getUsername();
 
         var response = new UserExistenceResponse(user != null, message, LocalDateTime.now());
         log.info("User existence check: {}", response);

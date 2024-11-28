@@ -5,12 +5,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class DeliveryStatus {
+    private UUID orderId;
     private String message;
     private String imageUrl;
     private int progress;
+    private boolean showMap;
+
+    private double courierLat;
+    private double courierLng;
+    private double restaurantLat;
+    private double restaurantLng;
+    private double userLat;
+    private double userLng;
+    private long timeToRestaurant;
+    private long timeToUser;
 }
