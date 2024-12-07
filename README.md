@@ -24,7 +24,7 @@ T-Delivery — это приложение на основе микросерв�
 #### ![Docker](https://img.shields.io/badge/Docker-%232496ED.svg?style=for-the-badge&logo=docker&logoColor=white) Docker
 #### ![Kafka](https://img.shields.io/badge/Apache%20Kafka-%23231F20.svg?style=for-the-badge&logo=apache-kafka&logoColor=white) Kafka
 #### ![Google Maps API](https://img.shields.io/badge/Google%20Maps%20API-%234285F4.svg?style=for-the-badge&logo=googlemaps&logoColor=white) Google Maps API
-#### ![JWT](https://img.shields.io/badge/JWT-%23000000.svg?style=for-the-badge&logo=jsonwebtokens&logoColor=white) 
+#### ![JWT](https://img.shields.io/badge/JWT-%23000000.svg?style=for-the-badge&logo=jsonwebtokens&logoColor=white) JWT 
 
 ## Описание сервисов
 
