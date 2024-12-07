@@ -13,6 +13,19 @@ T-Delivery — это приложение на основе микросерв�
 а также интеграция с внешним сервисом, таким как Google Maps API 
 для маршрутизации.
 
+## Стек технологий приложения
+
+#### ![Java](https://img.shields.io/badge/Java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) Java
+#### ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-%236DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white) Spring Boot 
+#### ![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) Spring Cloud
+#### ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23336791.svg?style=for-the-badge&logo=postgresql&logoColor=white) PostgreSQL
+#### ![PostGIS](https://img.shields.io/badge/PostGIS-%23336791.svg?style=for-the-badge&logo=postgresql&logoColor=white) PostGIS
+#### ![MongoDB](https://img.shields.io/badge/MongoDB-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white) MongoDB
+#### ![Docker](https://img.shields.io/badge/Docker-%232496ED.svg?style=for-the-badge&logo=docker&logoColor=white) Docker
+#### ![Kafka](https://img.shields.io/badge/Apache%20Kafka-%23231F20.svg?style=for-the-badge&logo=apache-kafka&logoColor=white) Kafka
+#### ![Google Maps API](https://img.shields.io/badge/Google%20Maps%20API-%234285F4.svg?style=for-the-badge&logo=googlemaps&logoColor=white) Google Maps API
+#### ![JWT](https://img.shields.io/badge/JWT-%23000000.svg?style=for-the-badge&logo=jsonwebtokens&logoColor=white) 
+
 ## Описание сервисов
 
 ### 1. `auth-service`
