@@ -4,20 +4,19 @@ import org.junit.jupiter.api.AfterAll;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
 public class TestContainerBase {
     @Container
     private static PostgreSQLContainer<?> postgreSQLContainer =
-            new PostgreSQLContainer<>(
-                    DockerImageName.parse("postgis/postgis:12-3.0")
-                    .asCompatibleSubstituteFor("postgres")
-            )
-                    .withDatabaseName("order-service")
-                    .withUsername("postgresql")
+            new PostgreSQLContainer<>("postgres:13")
+                    .withDatabaseName("routes_db")
+                    .withUsername("postgres")
                     .withPassword("root")
-                    .withExposedPorts(5432);
+                    .withExposedPorts(5432)
+                    .waitingFor(Wait.forListeningPort());
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {

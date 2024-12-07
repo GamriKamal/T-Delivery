@@ -49,7 +49,7 @@ public class UserServiceClient {
                     String.class
             );
 
-            log.info(responseEntity.getBody() + "privet");
+            log.info("Response: {}", responseEntity.getBody());
 
             return User.of(gson.fromJson(responseEntity.getBody(), UserDTO.class));
 
@@ -64,20 +64,29 @@ public class UserServiceClient {
         }
     }
 
-
     public User createUser(SignUpRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
         HttpEntity<SignUpRequest> requestEntity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                userServiceURL,
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    userServiceURL,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
 
-        return User.of(gson.fromJson(responseEntity.getBody(), UserDTO.class));
+            return User.of(gson.fromJson(responseEntity.getBody(), UserDTO.class));
+
+        } catch (HttpClientErrorException.BadRequest e) {
+            throw new InvalidRequestException("Invalid request for creating user: " + e.getLocalizedMessage());
+        } catch (ResourceAccessException e) {
+            throw new ServiceUnavailableException("User-service is currently unavailable. Please try again later. " + e.getLocalizedMessage());
+        } catch (Exception e) {
+            throw new UnexpectedErrorException("An unexpected error occurred while creating user: " + e.getLocalizedMessage());
+        }
     }
+
 }

@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import tdelivry.mr_irmag.user_service.TestContainerBase;
 import tdelivry.mr_irmag.user_service.domain.dto.UserDTO;
 import tdelivry.mr_irmag.user_service.domain.entity.Role;
@@ -25,6 +26,7 @@ import static reactor.core.publisher.Mono.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestPropertySource(properties = "eureka.client.enabled=false")
 class UserServiceTest extends TestContainerBase {
 
     @Mock

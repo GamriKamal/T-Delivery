@@ -41,7 +41,7 @@ public class WebSocketDeliveryStatusService {
     }
 
 
-    private DeliveryStatus getDeliveryStatusMessage(OrderStatus status, String address,boolean showMap) {
+    private DeliveryStatus getDeliveryStatusMessage(OrderStatus status, String address, boolean showMap) {
         String message;
         String imageUrl;
 
@@ -74,6 +74,7 @@ public class WebSocketDeliveryStatusService {
                 .message(message + " Адрес доставки: " + address)
                 .imageUrl(imageUrl)
                 .showMap(showMap)
+                .orderStatus(status)
                 .build();
     }
 
@@ -120,6 +121,7 @@ public class WebSocketDeliveryStatusService {
                 .message(message + " Адрес доставки: " + address)
                 .imageUrl(imageUrl)
                 .showMap(showMap)
+                .orderStatus(status)
                 .courierLat(courierLat)
                 .courierLng(courierLng)
                 .restaurantLat(restaurantLat)

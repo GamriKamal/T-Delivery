@@ -62,11 +62,11 @@ public class OrderServiceExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .errorCode(HttpStatus.SERVICE_UNAVAILABLE.value())
+                .errorCode(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getLocalizedMessage())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
 }

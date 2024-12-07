@@ -26,7 +26,6 @@ public class TestContainerBase {
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
-        System.setProperty("testcontainers.reuse.enable", "true");
         kafkaContainer.start();
         registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
 

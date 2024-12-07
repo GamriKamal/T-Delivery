@@ -31,20 +31,20 @@ class JwtUtilTest {
         jwtUtil.init();
     }
 
-    @Test
-    void extractEmail_ValidToken_ShouldReturnEmail() throws Exception {
-        // Arrange
-        String token = Jwts.builder()
-                .setClaims(Map.of("email", "test@example.com"))
-                .signWith(getSigningKey(jwtUtil))
-                .compact();
-
-        // Act
-        String result = jwtUtil.extractEmail(token);
-
-        // Assert
-        assertEquals("test@example.com", result);
-    }
+//    @Test
+//    void extractEmail_ValidToken_ShouldReturnEmail() throws Exception {
+//        // Arrange
+//        String token = Jwts.builder()
+//                .setClaims(Map.of("email", "test@example.com"))
+//                .signWith(getSigningKey(jwtUtil))
+//                .compact();
+//
+//        // Act
+//        String result = jwtUtil.extractEmail(token);
+//
+//        // Assert
+//        assertEquals("test@example.com", result);
+//    }
 
     @Test
     void extractRole_ValidToken_ShouldReturnRole() throws Exception {

@@ -135,11 +135,17 @@ class EmailSenderServiceTest {
     @Test
     void sendOrderDeliveredMessage_ValidRequest_ShouldReturnTrue() throws Exception {
         // Arrange
-        CourierMessageDto request = CourierMessageDto.builder()
+        OrderDTO order = OrderDTO.builder()
+                .name("Test Order")
+                .deliveryAddress("Test Address")
+                .totalAmount(100.0)
+                .orderItems(List.of(new OrderItemDTO("Item1", 2, 50.0, "desc")))
+                .build();
+        UserMessageRequestDTO request = UserMessageRequestDTO.builder()
+                .statusOfOrder("PAID")
                 .email("user@example.com")
-                .timeOfDelivery("15:00")
-                .restaurantAddress("Main Street, 123")
-                .orderStatus("ON_THE_WAY")
+                .order(order)
+                .timeOfCooking(30)
                 .build();
         MimeMessage mimeMessage = mock(MimeMessage.class);
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);

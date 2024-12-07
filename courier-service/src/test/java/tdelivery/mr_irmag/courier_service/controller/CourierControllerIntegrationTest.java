@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import tdelivery.mr_irmag.courier_service.domain.dto.GetOrderRequest;
 import tdelivery.mr_irmag.courier_service.domain.dto.Point;
@@ -21,6 +22,7 @@ import tdelivery.mr_irmag.courier_service.service.CourierService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = "eureka.client.enabled=false")
 class CourierControllerIntegrationTest {
 
     @Autowired
@@ -95,26 +98,39 @@ class CourierControllerIntegrationTest {
     @Test
     void takeOrder_Success_OrderApprovedAndStatusChanged() throws Exception {
         // Arrange
+        GetOrderRequest nearestOrderRequest = GetOrderRequest.builder()
+                .radius(3)
+                .point(new Point(37.6173, 55.7558))
+                .orderId(UUID.randomUUID())
+                .build();
+
         doNothing().when(courierService).takeOrder(any(GetOrderRequest.class));
 
         // Act & Assert
         mockMvc.perform(post("/courier/takeOrder")
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(nearestOrderRequestDto)))
+                        .content(objectMapper.writeValueAsString(nearestOrderRequest)))
                 .andExpect(status().isOk());
     }
 
     @Test
     void takeOrder_CacheError_ReturnsInternalServerError() throws Exception {
         // Arrange
+        GetOrderRequest nearestOrderRequest = GetOrderRequest.builder()
+                .radius(3)
+                .point(new Point(37.6173, 55.7558))
+                .orderId(UUID.randomUUID())
+                .build();
+
         doThrow(new CourierCacheException("No optimal order found in cache.")).when(courierService)
                 .takeOrder(any(GetOrderRequest.class));
 
         // Act & Assert
         mockMvc.perform(post("/courier/takeOrder")
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(nearestOrderRequestDto)))
+                        .content(objectMapper.writeValueAsString(nearestOrderRequest)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message").value("No optimal order found in cache."));
     }
+
 }

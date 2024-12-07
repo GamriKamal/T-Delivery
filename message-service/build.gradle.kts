@@ -27,19 +27,32 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
+	// Spring Boot
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+	// Spring Cloud
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+
+	// Kafka
+	implementation("org.springframework.kafka:spring-kafka")
+
+	// JSON library
 	implementation("com.google.code.gson:gson")
+
+	// Lombok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+
+	// Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("org.testcontainers:kafka:1.17.6")
 	testImplementation("org.testcontainers:junit-jupiter:1.18.3")
 }
+
 
 dependencyManagement {
 	imports {

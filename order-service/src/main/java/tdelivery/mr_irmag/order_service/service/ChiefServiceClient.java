@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChiefServiceClient {
 
-    public static int getTimeOfCooking(){
+    public static int getTimeOfCooking() {
         int minTimeOfCooking = 20;
         int maxTimeOfCooking = 40;
 

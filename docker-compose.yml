@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   discovery-service:
     build:
@@ -9,24 +8,38 @@ services:
       - "8761:8761"
     networks:
       - t-delivery
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   auth-service:
     build:
       context: ./auth-service
       dockerfile: Dockerfile
     container_name: auth-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
     ports:
       - "8081:8081"
     networks:
       - t-delivery
     depends_on:
       - discovery-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   menu-service:
     build:
       context: ./menu-service
       dockerfile: Dockerfile
     container_name: menu-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
     ports:
       - "8082:8082"
     networks:
@@ -35,12 +48,20 @@ services:
     depends_on:
       - menu-service-mongodb
       - discovery-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   user-service:
     build:
       context: ./user-service
       dockerfile: Dockerfile
     container_name: user-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
+      - spring.datasource.url=jdbc:postgresql://user-service-postgresql_db:5432/user_db
     ports:
       - "8083:8083"
     networks:
@@ -49,12 +70,21 @@ services:
     depends_on:
       - user-service-postgresql_db
       - discovery-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   order-service:
     build:
       context: ./order-service
       dockerfile: Dockerfile
     container_name: order-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
+      - spring.datasource.url=jdbc:postgresql://order-service-postgresql_db:5432/order_db
+      - spring.kafka.bootstrap-servers=kafka:9092
     ports:
       - "8084:8084"
     networks:
@@ -62,39 +92,42 @@ services:
       - order-service-t-delivery
     depends_on:
       - order-service-postgresql_db
+      - kafka
       - discovery-service
-
-  message-service:
-    build:
-      context: ./message-service
-      dockerfile: Dockerfile
-    container_name: message-service
-    ports:
-      - "8085:8085"
-    networks:
-      - t-delivery
-    depends_on:
-      - order-service
-      - courier-service
-      - discovery-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   courier-service:
     build:
       context: ./courier-service
       dockerfile: Dockerfile
     container_name: courier-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
+      - spring.kafka.bootstrap-servers=kafka:9092
     ports:
       - "8086:8086"
     networks:
       - t-delivery
     depends_on:
       - discovery-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   route-service:
     build:
       context: ./route-service
       dockerfile: Dockerfile
     container_name: route-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
+      - spring.datasource.url=jdbc:postgresql://route-service-postgresql_db:5432/routes_db
     ports:
       - "8087:8087"
     networks:
@@ -103,12 +136,42 @@ services:
     depends_on:
       - route-service-postgresql_db
       - discovery-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8087/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  message-service:
+    build:
+      context: ./message-service
+      dockerfile: Dockerfile
+    container_name: message-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
+      - spring.kafka.bootstrap-servers=kafka:9092
+    ports:
+      - "8085:8085"
+    networks:
+      - t-delivery
+    depends_on:
+      - order-service
+      - courier-service
+      - kafka
+      - discovery-service
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8085/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   gateway-service:
     build:
       context: ./gateway-service
       dockerfile: Dockerfile
     container_name: gateway-service
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/
     ports:
       - "8000:8000"
     networks:
@@ -122,7 +185,11 @@ services:
       - route-service
       - courier-service
       - discovery-service
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   user-service-postgresql_db:
     image: postgres:13
@@ -178,7 +245,7 @@ services:
 
   zookeeper:
     container_name: zookeeper
-    image: wurstmeister/zookeeper:3.4.6
+    image: zookeeper:3.7.0
     ports:
       - "2181:2181"
     environment:

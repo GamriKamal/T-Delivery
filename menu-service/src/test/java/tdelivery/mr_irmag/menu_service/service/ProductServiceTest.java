@@ -4,7 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import tdelivery.mr_irmag.menu_service.domain.DTO.ProductResponse;
 import tdelivery.mr_irmag.menu_service.domain.Entity.Product;
 import tdelivery.mr_irmag.menu_service.exception.ProductAlreadyExistsException;
@@ -16,7 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class ProductServiceTest {
 
@@ -32,33 +38,47 @@ class ProductServiceTest {
     }
 
     @Test
-    void getAllProducts_PositiveCase_ShouldReturnListOfProducts() {
+    void getAllProducts_PositiveCase_ShouldReturnPagedProducts() {
         // Arrange
         Product product1 = new Product("1", "Product 1", 100.0, "Description 1", "url");
         Product product2 = new Product("2", "Product 2", 150.0, "Description 2", "url");
-        when(productRepository.findAll()).thenReturn(List.of(product1, product2));
+        List<Product> products = List.of(product1, product2);
+
+        Page<Product> productPage = new PageImpl<>(products, PageRequest.of(0, 10), 2);
+
+        when(productRepository.findAll(Mockito.any(Pageable.class))).thenReturn(productPage);
 
         // Act
-        List<ProductResponse> result = productService.getAllProducts();
+        Page<ProductResponse> result = productService.getAllProducts(PageRequest.of(0, 10));
 
         // Assert
-        assertEquals(2, result.size());
-        assertEquals("Product 1", result.get(0).getName());
-        assertEquals(100.0, result.get(0).getPrice());
+        assertEquals(2, result.getContent().size());
+        assertEquals("Product 1", result.getContent().get(0).getName());
+        assertEquals(100.0, result.getContent().get(0).getPrice());
+        assertEquals("Product 2", result.getContent().get(1).getName());
+        assertEquals(150.0, result.getContent().get(1).getPrice());
+
+        assertEquals(2, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
+        assertEquals(10, result.getSize());
+        assertEquals(0, result.getNumber());
     }
 
     @Test
     void getAllProducts_NegativeCase_ShouldThrowProductNotFoundException() {
         // Arrange
-        when(productRepository.findAll()).thenReturn(Collections.emptyList());
+        Page<Product> emptyPage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 10), 0);
+
+        when(productRepository.findAll(Mockito.any(Pageable.class))).thenReturn(emptyPage);
 
         // Act & Assert
         ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
-            productService.getAllProducts();
+            productService.getAllProducts(PageRequest.of(0, 10));
         });
 
         assertEquals("No products were found.", exception.getMessage());
     }
+
 
     @Test
     void getProductById_PositiveCase_ShouldReturnProduct() {

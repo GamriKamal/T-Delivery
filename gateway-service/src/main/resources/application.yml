@@ -18,6 +18,13 @@ spring:
     loadbalancer:
       ribbon:
         enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 token:
   signing:
     key: bXlT3cQ7GQ9PTeRHz0kF8FlqKuoZQzP4Vbq4YlU1sjI=

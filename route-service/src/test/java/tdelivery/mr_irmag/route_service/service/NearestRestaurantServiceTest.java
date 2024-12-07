@@ -119,17 +119,6 @@ class NearestRestaurantServiceTest {
         assertEquals("Restaurant A", result.getRestaurantName());
     }
 
-//    @Test
-//    void findClosestRestaurant_EmptyResponses_ShouldThrowOptimalRouteNotFound() {
-//        // Arrange
-//        List<GoogleDistanceMatrixResponse> responses = Collections.emptyList();
-//
-//        // Act & Assert
-//        OptimalRouteNotFound exception = assertThrows(OptimalRouteNotFound.class,
-//                () -> invokePrivateFindClosestRestaurant(responses));
-//        assertEquals("There is no closest restaurant", exception.getMessage());
-//    }
-
     private GoogleDistanceMatrixResponse invokePrivateFindClosestRestaurant(List<GoogleDistanceMatrixResponse> responses) {
         try {
             Method method = NearestRestaurantService.class.getDeclaredMethod("findClosestRestaurant", List.class);

@@ -7,6 +7,12 @@ spring:
       group-id: order-group
       auto-offset-reset: earliest
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 server:
   port: 8086
 

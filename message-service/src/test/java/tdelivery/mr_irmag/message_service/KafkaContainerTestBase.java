@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 @Testcontainers
 @SpringBootTest
 @EnableKafka
+@TestPropertySource(properties = "eureka.client.enabled=false")
 @ComponentScan(basePackages = "tdelivery/mr_irmag/message_service")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class KafkaContainerTestBase {
@@ -26,7 +28,6 @@ public class KafkaContainerTestBase {
 
     @DynamicPropertySource
     static void setKafkaProperties(DynamicPropertyRegistry registry) {
-        System.setProperty("testcontainers.reuse.enable", "true");
         kafkaContainer.start();
         registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
     }

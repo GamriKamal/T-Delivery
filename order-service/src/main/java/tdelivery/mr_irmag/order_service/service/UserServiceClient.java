@@ -17,10 +17,9 @@ import java.util.UUID;
 @Log4j2
 public class UserServiceClient {
 
+    private final RestTemplate restTemplate;
     @Value("${tdelivery.userService.url}")
     private String userServiceUrl;
-
-    private final RestTemplate restTemplate;
 
     public String getUserByID(UUID id) {
         try {

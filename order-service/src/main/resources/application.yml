@@ -24,8 +24,15 @@ spring:
       auto-offset-reset: earliest
   transaction:
     default-timeout: 30s
+
 server:
   port: 8084
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 
 tdelivery:
   userService:

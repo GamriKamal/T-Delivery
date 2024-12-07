@@ -34,7 +34,7 @@ public class KafkaConsumerService {
 
         KafkaDelayedMessageDTO messageDTO = gson.fromJson(message, KafkaDelayedMessageDTO.class);
 
-        if(orderService.getOrderById(messageDTO.getOrderId()).getStatus() != OrderStatus.CANCELED) {
+        if (orderService.getOrderById(messageDTO.getOrderId()).getStatus() != OrderStatus.CANCELED) {
             var result = orderService.changeStatusOfOrder(messageDTO.getOrderId(), "PREPARED");
 
             messageServiceClient.sendEmail(MessageRequestDTO.builder()

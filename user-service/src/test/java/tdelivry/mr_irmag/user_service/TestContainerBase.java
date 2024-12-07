@@ -10,10 +10,7 @@ import org.testcontainers.utility.DockerImageName;
 public class TestContainerBase {
     @Container
     private static PostgreSQLContainer<?> postgreSQLContainer =
-            new PostgreSQLContainer<>(
-                    DockerImageName.parse("postgis/postgis:12-3.0")
-                    .asCompatibleSubstituteFor("postgres")
-            )
+            new PostgreSQLContainer<>("postgres:13")
                     .withDatabaseName("order-service")
                     .withUsername("postgresql")
                     .withPassword("root")
@@ -23,8 +20,6 @@ public class TestContainerBase {
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
-        System.setProperty("testcontainers.reuse.enable", "true");
-
         postgreSQLContainer.start();
         registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
         registry.add("spring.datasource.username", postgreSQLContainer::getUsername);

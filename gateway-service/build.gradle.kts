@@ -28,24 +28,38 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
-	testImplementation("junit:junit:4.12")
-	testImplementation("org.mockito:mockito-core:4.11.0")
+	// Spring Boot
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+	// Spring Cloud
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+
+	// JSON Web Token (JWT) libraries
 	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
+
+	// Lombok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+
+	// Testing
+	testImplementation("junit:junit:4.12")
+	testImplementation("org.mockito:mockito-core:4.11.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
+
 
 dependencyManagement {
 	imports {
 		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
 	}
+}
+
+springBoot {
+	mainClass = "tdelivery.mr_irmag.gateway_service.GatewayServiceApp"
 }
 
 tasks.withType<Test> {
@@ -70,8 +84,8 @@ tasks.jacocoTestReport {
 
 	classDirectories.setFrom(files(classDirectories.files.map {
 		fileTree(it).apply {
-			exclude("tdelivery/mr_irmag/gateway_service/Config/**")
-			exclude("tdelivery/mr_irmag/gateway_service/DTO/**")
+			exclude("tdelivery/mr_irmag/gateway_service/config/**")
+			exclude("tdelivery/mr_irmag/gateway_service/dto/**")
 		}
 	}))
 }

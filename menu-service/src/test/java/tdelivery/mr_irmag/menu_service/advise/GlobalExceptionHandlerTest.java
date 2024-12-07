@@ -46,7 +46,8 @@ class GlobalExceptionHandlerTest {
         // Arrange
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
         String databaseErrorMessage = "Unable to connect to the database";
-        DataAccessException exception = new DataAccessException(databaseErrorMessage) {};
+        DataAccessException exception = new DataAccessException(databaseErrorMessage) {
+        };
 
         // Act
         ResponseEntity<String> response = handler.handleDatabaseErrors(exception);

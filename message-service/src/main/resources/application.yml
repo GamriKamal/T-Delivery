@@ -4,8 +4,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: nezoxzzz@gmail.com
-    password: cave rgcb woyo diuj
+    username: addressOfYour@gmail.com
+    password: password of your gmail
     properties:
       mail:
         smtp:
@@ -17,6 +17,12 @@ spring:
     consumer:
       group-id: message-group
       auto-offset-reset: earliest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 
 messageService:
   url: http://message-service:8085/message/sendMessage

@@ -7,6 +7,7 @@ stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/deliveryStatus', (statusUpdate) => {
         const deliveryStatus = JSON.parse(statusUpdate.body);
+        updateOrderStatus(deliveryStatus);
         updateDeliveryProgress(deliveryStatus);
         console.log('Subscribed!')
     });
@@ -49,11 +50,22 @@ let totalDistanceAB, totalDistanceBC;
 const pauseTime = 10 * 1000;
 let distanceTraveled = 0;
 let waypoint = {}
+let courierMarker = null;
 
 function initializeMapAndSimulation(deliveryStatus) {
+    distanceTraveled = 0;
+    document.getElementById("progress").style.width = "0%";
+    document.getElementById("progress").textContent = "0%";
+
     const origin = { lat: deliveryStatus.courierLat, lng: deliveryStatus.courierLng };
     waypoint = { lat: deliveryStatus.restaurantLat, lng: deliveryStatus.restaurantLng };
     const destination = { lat: deliveryStatus.userLat, lng: deliveryStatus.userLng };
+
+    updateOrderStatus(deliveryStatus);
+
+    if (map) {
+        map = null;
+    }
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: origin,
@@ -96,7 +108,37 @@ function initializeMapAndSimulation(deliveryStatus) {
     });
 }
 
+function updateOrderStatus(deliveryStatus) {
+    console.log("Order Status:", deliveryStatus.orderStatus);
+    const statusElement = document.getElementById("current-status");
+
+    switch (deliveryStatus.orderStatus) {
+        case "PAID":
+            statusElement.innerText = "Заказ оплачен";
+            break;
+        case "PREPARED":
+            statusElement.innerText = "Заказ подготовлен к отправке";
+            break;
+        case "SHIPPED":
+            statusElement.innerText = "Заказ отправлен курьером";
+            break;
+        case "DELIVERED":
+            statusElement.innerText = "Заказ доставлен";
+            break;
+        case "CANCELED":
+            statusElement.innerText = "Заказ отменен";
+            break;
+        default:
+            statusElement.innerText = "Активного заказа нет.";
+            break;
+    }
+}
+
 function startSimulationAB(deliveryStatus) {
+    if (courierMarker) {
+        courierMarker.setMap(null);
+    }
+
     courierMarker = new google.maps.Marker({
         position: origin,
         map: map,
@@ -179,6 +221,7 @@ function updateDeliveryProgress(deliveryStatus) {
     statusImageElement.style.display = "block";
 
     if (deliveryStatus.showMap) {
+        document.getElementById("map-progress-container").style.display = "flex";
         document.getElementById("map").style.display = "block";
         initializeMapAndSimulation(deliveryStatus);
     } else {

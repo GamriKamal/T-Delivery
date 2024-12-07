@@ -17,11 +17,10 @@ import tdelivery.mr_irmag.order_service.domain.dto.calculationDelivery.RouteServ
 @Service
 @Log4j2
 public class RouteServiceClient {
-    @Value("${tdelivery.route-service.url}")
-    private String routeServiceUrl;
-
     private final RestTemplate restTemplate;
     private final Gson gson;
+    @Value("${tdelivery.route-service.url}")
+    private String routeServiceUrl;
 
     @Autowired
     public RouteServiceClient(RestTemplate restTemplate, Gson gson) {

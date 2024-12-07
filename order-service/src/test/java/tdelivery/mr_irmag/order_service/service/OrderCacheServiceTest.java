@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.geo.Point;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import tdelivery.mr_irmag.order_service.TestContainerBase;
 
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Testcontainers
+@TestPropertySource(properties = "eureka.client.enabled=false")
 class OrderCacheServiceTest extends TestContainerBase {
 
     @Autowired

@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 import tdelivery.mr_irmag.courier_service.domain.dto.*;
 import tdelivery.mr_irmag.courier_service.domain.dto.findNearestOrder.GetNearestOrderResponse;
 import tdelivery.mr_irmag.courier_service.domain.dto.findNearestOrder.GoogleDistanceResponse;
@@ -30,7 +31,9 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CourierServiceIntegrationTest {
+@TestPropertySource(properties = "eureka.client.enabled=false")
+class CourierServiceIntegrationTest {
+
     @InjectMocks
     private CourierService courierService;
 
@@ -51,7 +54,7 @@ public class CourierServiceIntegrationTest {
     private GetOrderRequest getOrderRequest;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         nearestOrderRequestDto = new NearestOrderRequestDto();
         nearestOrderRequestDto.setRadius(3);
         nearestOrderRequestDto.setPoint(new Point(10.0, 20.0));
@@ -66,7 +69,7 @@ public class CourierServiceIntegrationTest {
     }
 
     @Test
-    public void getNearestOrders_OrdersFound_ReturnsOrderResponse() {
+    void getNearestOrders_OrdersFound_ReturnsOrderResponse() {
         // Arrange
         UUID orderId = UUID.fromString("c89a9cfc-33b3-4167-b7fc-cf39f872ba9c");
         List<Order> order = List.of(Order.builder()
@@ -102,7 +105,7 @@ public class CourierServiceIntegrationTest {
     }
 
     @Test
-    public void getNearestOrders_NoOrdersFound_ThrowsOrderNotFoundException() {
+    void getNearestOrders_NoOrdersFound_ThrowsOrderNotFoundException() {
         // Arrange
         Mockito.when(orderServiceClient.getNearestOrders(any(NearestOrderRequestDto.class))).thenReturn(Collections.emptyList());
 
@@ -114,7 +117,7 @@ public class CourierServiceIntegrationTest {
     }
 
     @Test
-    public void getNearestOrders_RouteServiceThrowsException_ThrowsRouteServiceException() {
+    void getNearestOrders_RouteServiceThrowsException_ThrowsRouteServiceException() {
         // Arrange
         UUID orderId = UUID.fromString("c89a9cfc-33b3-4167-b7fc-cf39f872ba9c");
         Order order = Order.builder()
@@ -141,7 +144,7 @@ public class CourierServiceIntegrationTest {
     }
 
     @Test
-    public void getNearestOrders_CourierCacheThrowsException_ThrowsCourierCacheException() {
+    void getNearestOrders_CourierCacheThrowsException_ThrowsCourierCacheException() {
         // Arrange
         NearestOrderRequestDto request = new NearestOrderRequestDto();
         request.setPoint(new Point(10.0, 20.0));
@@ -165,7 +168,7 @@ public class CourierServiceIntegrationTest {
 
 
     @Test
-    public void takeOrder_OrderFound_Success() {
+    void takeOrder_OrderFound_Success() {
         getOrderRequest.setOrderId(UUID.fromString("c89a9cfc-33b3-4167-b7fc-cf39f872ba9c"));
         // Arrange
         UUID orderId = UUID.fromString("c89a9cfc-33b3-4167-b7fc-cf39f872ba9c");
@@ -205,7 +208,7 @@ public class CourierServiceIntegrationTest {
     }
 
     @Test
-    public void takeOrder_NoOptimalOrder_ThrowsOrderNotFoundException() {
+    void takeOrder_NoOptimalOrder_ThrowsOrderNotFoundException() {
         // Arrange
         Mockito.when(courierCacheService.getOptimalOrder(any(Point.class))).thenReturn(new ArrayList<>());
 
@@ -217,7 +220,7 @@ public class CourierServiceIntegrationTest {
     }
 
     @Test
-    public void takeOrder_StatusUpdateFails_ThrowsExternalServiceException() {
+    void takeOrder_StatusUpdateFails_ThrowsExternalServiceException() {
         // Arrange
         UUID orderId = UUID.fromString("c89a9cfc-33b3-4167-b7fc-cf39f872ba9c");
         List<Order> order = List.of(Order.builder()
@@ -251,7 +254,7 @@ public class CourierServiceIntegrationTest {
 
 
     @Test
-    public void takeOrder_NoTimeDeliveryInCache_ThrowsCourierCacheException() {
+    void takeOrder_NoTimeDeliveryInCache_ThrowsCourierCacheException() {
         // Arrange
         UUID orderId = UUID.fromString("c89a9cfc-33b3-4167-b7fc-cf39f872ba9c");
         List<Order> order = List.of(Order.builder()
@@ -278,7 +281,7 @@ public class CourierServiceIntegrationTest {
     }
 
     @Test
-    public void takeOrder_EmailSendingFails_ThrowsExternalServiceException() {
+    void takeOrder_EmailSendingFails_ThrowsExternalServiceException() {
         // Arrange
         UUID orderId = UUID.fromString("c89a9cfc-33b3-4167-b7fc-cf39f872ba9c");
         List<Order> order = List.of(Order.builder()

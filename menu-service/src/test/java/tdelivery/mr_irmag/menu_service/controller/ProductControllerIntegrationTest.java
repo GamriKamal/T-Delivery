@@ -8,8 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 import tdelivery.mr_irmag.menu_service.domain.DTO.ProductResponse;
@@ -26,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
+@TestPropertySource(properties = "eureka.client.enabled=false")
 class ProductControllerIntegrationTest {
 
     @Autowired
@@ -38,7 +44,7 @@ class ProductControllerIntegrationTest {
     private CSVService csvService;
 
     @Test
-    void getMenuItems_shouldReturnListOfProducts() throws Exception {
+    void getMenuItems_shouldReturnPagedProducts() throws Exception {
         // Arrange
         List<ProductResponse> products = List.of(
                 ProductResponse.builder()
@@ -53,18 +59,27 @@ class ProductControllerIntegrationTest {
                         .build()
         );
 
-        Mockito.when(productService.getAllProducts()).thenReturn(products);
+        Page<ProductResponse> productPage = new PageImpl<>(products, PageRequest.of(0, 10), 2);
+
+        Mockito.when(productService.getAllProducts(Mockito.any(Pageable.class))).thenReturn(productPage);
 
         // Act & Assert
-        mockMvc.perform(get("/menu/products"))
+        mockMvc.perform(get("/menu/products")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].name").value("Product 1"))
-                .andExpect(jsonPath("$[0].price").value(100.0))
-                .andExpect(jsonPath("$[1].name").value("Product 2"))
-                .andExpect(jsonPath("$[1].price").value(200.0));
+                .andExpect(jsonPath("$.content.size()").value(2))
+                .andExpect(jsonPath("$.content[0].name").value("Product 1"))
+                .andExpect(jsonPath("$.content[0].price").value(100.0))
+                .andExpect(jsonPath("$.content[1].name").value("Product 2"))
+                .andExpect(jsonPath("$.content[1].price").value(200.0))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.number").value(0));
     }
+
 
     @Test
     void createProduct_shouldCreateAndReturnProduct() throws Exception {
@@ -83,13 +98,13 @@ class ProductControllerIntegrationTest {
         mockMvc.perform(post("/menu")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                    {
-                        "name": "Product 1",
-                        "price": 100.0,
-                        "description": "Description 1",
-                        "imageUrl": "http://example.com/image.jpg"
-                    }
-                """))
+                                    {
+                                        "name": "Product 1",
+                                        "price": 100.0,
+                                        "description": "Description 1",
+                                        "imageUrl": "http://example.com/image.jpg"
+                                    }
+                                """))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1"))

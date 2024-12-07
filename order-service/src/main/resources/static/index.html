@@ -1,27 +1,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello WebSocket</title>
+    <meta charset="UTF-8">
+    <title>Статус заказа - Т-Delivery</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="/main.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <script src="/app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #f1c40f;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+        }
+
+        .header {
+            background-color: #000;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #f1c40f;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header img {
+            height: 150px;
+            margin-right: 15px;
+        }
+
+        h3#status-message {
+            font-size: 2rem;
+            margin-top: 20px;
+            color: #f1c40f;
+            font-weight: 600;
+        }
+
+        #status-image {
+            display: block;
+            margin: 20px auto;
+        }
+
+        .status-container {
+            background: #222;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 60%;
+            color: #f1c40f;
+            font-size: 1.2rem;
+        }
+
+        #map-progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        #map {
+            margin: 20px auto;
+            width: 70%;
+            height: 400px;
+            border: 2px solid #f1c40f;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 70%;
+            margin-top: 10px;
+            height: 30px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #9f7409, #f1c40f);
+            color: black;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 5px;
+        }
+
+    </style>
 </head>
 <body>
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-    enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
-
-<h3 id="status-message">Waiting for order updates...</h3>
-<img id="status-image" src="" alt="Status Image" style="width: 200px; height: auto; margin-top: 20px;">
-
-<div id="map" style="width: 70%; height: 400px"></div>
-<div class="progress-bar">
-    <div class="progress" id="progress">0%</div>
+<div class="header">
+    <img src="./images/T-Delivery-logo.png" alt="T-Delivery Logo">
+    <span>Статус вашего заказа</span>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALR3HrzUsLLwY_KkIDutP8FCALjVzAdOw&callback=initMap" async defer></script>
+<h3 id="status-message">Ожидаем обновления статуса заказа...</h3>
+<img id="status-image" src="" alt="Status Image" style="width: 150px; height: 150px;">
 
+<div class="status-container">
+    <h4>Текущий статус заказа:</h4>
+    <p id="current-status">Активного заказа нет...</p>
+</div>
+
+<!--<div id="map"></div>-->
+
+<!--<div class="progress-bar">-->
+<!--    <div class="progress" id="progress">0%</div>-->
+<!--</div>-->
+
+<div id="map-progress-container" style="display: none;">
+    <div id="map"></div>
+    <div class="progress-bar">
+        <div class="progress" id="progress">0%</div>
+    </div>
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY" async defer></script>
 </body>
 </html>

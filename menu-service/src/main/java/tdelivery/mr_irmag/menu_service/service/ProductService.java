@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tdelivery.mr_irmag.menu_service.domain.DTO.ProductResponse;
 import tdelivery.mr_irmag.menu_service.domain.Entity.Product;
@@ -12,8 +14,8 @@ import tdelivery.mr_irmag.menu_service.exception.ProductAlreadyExistsException;
 import tdelivery.mr_irmag.menu_service.exception.ProductNotFoundException;
 import tdelivery.mr_irmag.menu_service.repository.ProductRepository;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +41,8 @@ public class ProductService {
             throw new ProductNotFoundException("No products were found.");
         }
     }
+
+
 
     @Schema(description = "Получает продукт по его id.")
     public Product getProductById(String id) {

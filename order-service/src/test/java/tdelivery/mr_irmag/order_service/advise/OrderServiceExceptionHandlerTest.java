@@ -72,9 +72,9 @@ class OrderServiceExceptionHandlerTest {
         ResponseEntity<ErrorResponse> response = exceptionHandler.handleUserServiceCommunicationException(exception);
 
         // Assert
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getErrorCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE.value());
+        assertThat(response.getBody().getErrorCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getBody().getMessage()).isEqualTo("User service unavailable");
         assertThat(response.getBody().getTimestamp()).isBeforeOrEqualTo(LocalDateTime.now());
     }

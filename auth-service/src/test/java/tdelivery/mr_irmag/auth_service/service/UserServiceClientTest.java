@@ -82,7 +82,7 @@ class UserServiceClientTest {
         SignInRequest request = new SignInRequest("validUsername", "pass");
         UUID uuid = UUID.randomUUID();
         String jsonResponse = "{\"id\":" + uuid + ",\"username\":\"validUsername\",\"password\":\"pass\"}";
-        UserDTO userDTO = new UserDTO(UUID.randomUUID(), "validUsername", "validUsername@gmail.com", "pass", Role.USER, "someAddress");
+        UserDTO userDTO = new UserDTO(UUID.randomUUID(), "validUsername", "validUsername@gmail.com", Role.USER);
         User expectedUser = User.of(userDTO);
 
         when(restTemplate.exchange(
@@ -132,8 +132,8 @@ class UserServiceClientTest {
         // Arrange
         SignUpRequest request = new SignUpRequest("newUser", "newUser@gmail.com", "pass");
         UUID uuid = UUID.randomUUID();
-        String jsonResponse = "{\"id\":" + uuid + ",\"username\":\"newUser\",\"password\":\"pass\"}";
-        UserDTO userDTO = new UserDTO(uuid, "newUser", "newUser@gmail.com", "pass", Role.USER, "someAddress");
+        String jsonResponse = "{'id':" + uuid + ",'username':'newUser','password':'pass'}";
+        UserDTO userDTO = new UserDTO(uuid, "newUser", "newUser@gmail.com", Role.USER);
         User expectedUser = User.of(userDTO);
 
         when(restTemplate.exchange(

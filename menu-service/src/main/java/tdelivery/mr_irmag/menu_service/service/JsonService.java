@@ -31,7 +31,8 @@ public class JsonService {
                 return Collections.emptyList();
             }
 
-            return gson.fromJson(reader, new TypeToken<List<Product>>(){}.getType());
+            return gson.fromJson(reader, new TypeToken<List<Product>>() {
+            }.getType());
         } catch (Exception e) {
             log.error("Failed to parse JSON file: {}", e.getMessage(), e);
             return Collections.emptyList();

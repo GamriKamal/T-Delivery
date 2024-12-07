@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class RouteServiceClientTest {
+class RouteServiceClientTest {
 
     @Mock
     private RestTemplate restTemplate;
@@ -50,7 +50,7 @@ public class RouteServiceClientTest {
     }
 
     @Test
-    public void findNearestOrder_SuccessfulResponse_ReturnsRouteServiceResponse() {
+    void findNearestOrder_SuccessfulResponse_ReturnsRouteServiceResponse() {
         // Arrange
         String mockResponseBody = "{\"orderId\":\"7b2041c7-796e-4f60-8702-b2d2d096da66\"}";
         ResponseEntity<String> mockResponse = new ResponseEntity<>(mockResponseBody, HttpStatus.OK);
@@ -68,7 +68,7 @@ public class RouteServiceClientTest {
     }
 
     @Test
-    public void findNearestOrder_ErrorResponse_ThrowsHttpClientErrorException() {
+    void findNearestOrder_ErrorResponse_ThrowsHttpClientErrorException() {
         // Arrange
         ResponseEntity<String> mockResponse = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -81,7 +81,7 @@ public class RouteServiceClientTest {
 
 
     @Test
-    public void findNearestOrder_EmptyResponse_ThrowsNullPointerException() {
+    void findNearestOrder_EmptyResponse_ThrowsNullPointerException() {
         // Arrange
         String emptyResponseBody = "";
         ResponseEntity<String> mockResponse = new ResponseEntity<>(emptyResponseBody, HttpStatus.OK);

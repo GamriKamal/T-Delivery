@@ -17,7 +17,7 @@ public class CSVService {
         this.productService = productService;
     }
 
-    public boolean parseCSV(MultipartFile file){
+    public boolean parseCSV(MultipartFile file) {
         try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             String[] nextLine;
 

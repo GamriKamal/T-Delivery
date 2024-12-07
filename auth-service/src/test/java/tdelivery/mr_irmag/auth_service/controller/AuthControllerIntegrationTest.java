@@ -1,6 +1,7 @@
 package tdelivery.mr_irmag.auth_service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,12 @@ public class AuthControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setup() {
+    public void init() {
         objectMapper = new ObjectMapper();
     }
+
+    @AfterEach
+    public void destruct() { objectMapper = null; }
 
     @Test
     public void signUp_ValidRequest_ShouldReturnJwtToken() throws Exception {

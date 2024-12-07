@@ -63,7 +63,7 @@ public class EmailSenderService {
         }
     }
 
-    public boolean sendOrderDeliveredMessage(CourierMessageDto request) {
+    public boolean sendOrderDeliveredMessage(UserMessageRequestDTO request) {
         String subject = "Ваш заказ доставлен!";
         String htmlContent = loadHtmlTemplateForDelivery();
 
@@ -75,6 +75,20 @@ public class EmailSenderService {
         }
         return true;
     }
+
+    public boolean sendCanceledStatusMessage(UserMessageRequestDTO request) {
+        String subject = "Ваш заказ отменен";
+        String htmlContent = loadHtmlTemplateForCanceledOrder(request.getOrder());
+
+        try {
+            sendHtmlEmail(request.getEmail(), subject, htmlContent);
+        } catch (MessagingException e) {
+            log.error("Error sending canceled order email", e);
+            return false;
+        }
+        return true;
+    }
+
 
     private String loadHtmlTemplateForOrderStatusUpdate(CourierMessageDto messageRequest) {
         InputStream inputStream = loadResourceAsStream("templates/order_status_update.html");
@@ -128,6 +142,27 @@ public class EmailSenderService {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        return htmlBuilder.toString();
+    }
+
+    private String loadHtmlTemplateForCanceledOrder(OrderDTO order) {
+        InputStream inputStream = loadResourceAsStream("templates/order_canceled.html");
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.replace("${name}", order.getName())
+                        .replace("${deliveryAddress}", order.getDeliveryAddress())
+                        .replace("${totalAmount}", String.valueOf(order.getTotalAmount()))
+                        .replace("${orderItems}", createOrderItemsHtml(order.getOrderItems()));
+
+                htmlBuilder.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading HTML template for canceled order", e);
         }
 
         return htmlBuilder.toString();

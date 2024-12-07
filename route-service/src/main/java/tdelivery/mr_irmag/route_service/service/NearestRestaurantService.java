@@ -44,6 +44,7 @@ public class NearestRestaurantService {
                 .restaurantName(nearestRestaurant.getRestaurantName())
                 .restaurantAddress(nearestRestaurant.getRestaurantAddress())
                 .restaurantCoordinates(nearestRestaurant.getRestaurantCoordinates())
+                .userPoint(userPoint)
                 .build();
     }
 

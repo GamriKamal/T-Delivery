@@ -27,10 +27,18 @@ public class KafkaConsumerService {
     public void listen(String message) {
         log.info("Received message: " + message);
         var result = gson.fromJson(message, UserMessageRequestDTO.class);
-        if(result.getStatusOfOrder().equals("PAID")) {
-            emailSenderService.sendPaidStatusMessage(result);
-        } else if(result.getStatusOfOrder().equals("PREPARED")) {
-            emailSenderService.sendShippedStatusMessage(result);
+        try {
+            if(result.getStatusOfOrder().equals("PAID")) {
+                emailSenderService.sendPaidStatusMessage(result);
+            } else if(result.getStatusOfOrder().equals("PREPARED")) {
+                emailSenderService.sendShippedStatusMessage(result);
+            } else if(result.getStatusOfOrder().equals("DELIVERED")) {
+                emailSenderService.sendOrderDeliveredMessage(result);
+            } else if(result.getStatusOfOrder().equals("CANCELED")) {
+                emailSenderService.sendCanceledStatusMessage(result);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
     }
 
@@ -40,8 +48,6 @@ public class KafkaConsumerService {
         var result = gson.fromJson(message, CourierMessageDto.class);
         if(result.getOrderStatus().equals("SHIPPED")){
             emailSenderService.sendCourierPickupMessage(result);
-        } else if(result.getOrderStatus().equals("DELIVERED")){
-            emailSenderService.sendOrderDeliveredMessage(result);
         }
     }
 }

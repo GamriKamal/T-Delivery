@@ -39,11 +39,11 @@ public class UserDTO {
     public static UserDTO of(User user) {
         return UserDTO.builder()
                 .id(user.getId())
+                .password(user.getPassword())
+                .address(user.getAddress())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .password(user.getPassword())
                 .role(user.getRole())
-                .address(user.getAddress())
                 .build();
     }
 }

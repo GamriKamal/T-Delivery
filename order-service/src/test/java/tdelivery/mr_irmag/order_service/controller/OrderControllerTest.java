@@ -11,6 +11,7 @@ import org.springframework.data.geo.Point;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -40,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = "eureka.client.enabled=false")
 class OrderControllerTest extends TestContainerBase {
     @Autowired
     private MockMvc mockMvc;
@@ -213,7 +215,7 @@ class OrderControllerTest extends TestContainerBase {
 
         // Act & Assert
         mockMvc.perform(get("/order/cancel")
-                        .header("id", id.toString()))
+                        .header("order_Id", id.toString()))
                 .andExpect(status().isOk());
     }
 

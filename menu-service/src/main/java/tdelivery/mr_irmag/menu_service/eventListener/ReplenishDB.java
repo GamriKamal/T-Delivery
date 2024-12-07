@@ -16,23 +16,20 @@ import tdelivery.mr_irmag.menu_service.service.ProductService;
 @Log4j2
 public class ReplenishDB {
 
+    public static final String RESET = "\033[0m";
+    public static final String GREEN_BOLD_BRIGHT = "\033[1;92m";
+    public static final String YELLOW_BOLD_BRIGHT = "\033[1;93m";
     private final JsonService jsonService;
     private final ProductService productService;
     private final MongoClient mongoClient;
-
+    @Value("${products.hardees.path}")
+    private String hardeesPath;
     @Autowired
     public ReplenishDB(JsonService jsonService, ProductService productService, MongoClient mongoClient) {
         this.jsonService = jsonService;
         this.productService = productService;
         this.mongoClient = mongoClient;
     }
-
-    @Value("${products.hardees.path}")
-    private String hardeesPath;
-
-    public static final String RESET = "\033[0m";
-    public static final String GREEN_BOLD_BRIGHT = "\033[1;92m";
-    public static final String YELLOW_BOLD_BRIGHT = "\033[1;93m";
 
     @PostConstruct
     public void initDB() {
@@ -65,13 +62,13 @@ public class ReplenishDB {
         addDataToDb();
     }
 
-    public void addDataToDb(){
+    public void addDataToDb() {
         log.info("{}Started adding data to db... {}", GREEN_BOLD_BRIGHT, RESET);
         try {
             var productList = jsonService.fromJsonToPOJO(hardeesPath);
             productList.forEach(item -> productService.saveProduct(item));
 
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getLocalizedMessage());
         }
     }

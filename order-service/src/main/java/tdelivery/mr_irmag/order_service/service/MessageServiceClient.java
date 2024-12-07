@@ -13,14 +13,13 @@ import tdelivery.mr_irmag.order_service.exception.OrderEmptyException;
 @RequiredArgsConstructor
 @Log4j2
 public class MessageServiceClient {
+    private final KafkaProducerService kafkaProducerService;
+    private final Gson gson;
     @Value("${tdelivery.messageService.topic}")
     private String messageServiceTopic;
 
-    private final KafkaProducerService kafkaProducerService;
-    private final Gson gson;
-
     public void sendEmail(MessageRequestDTO messageRequestDTO) {
-        if(messageRequestDTO == null){
+        if (messageRequestDTO == null) {
             log.error("Provided order for sending message is null!");
             throw new OrderEmptyException("Provided order for sending message is null!");
         }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.*;
 import org.springframework.data.geo.Point;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import tdelivery.mr_irmag.order_service.exception.InvalidOrderStatusException;
@@ -134,16 +135,19 @@ public class OrderService {
         }
     }
 
-    public void sendEmail(UUID orderId){
+    @Async
+    @Transactional
+    public void sendEmail(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("No order found for id: " + orderId));
         UserInfoResponseDTO userDTO = getUsernameAndEmailOfUserById(order.getUserId());
+        log.info("Sending message: {} {}", order.getId(), order.getStatus());
 
         sendOrderEmail(userDTO.getEmail(), order, 1);
     }
 
     private void sendOrderEmail(String email, Order order, int timeOfCooking) {
         messageServiceClient.sendEmail(MessageRequestDTO.builder()
-                .statusOfOrder(OrderStatus.PAID.toString())
+                .statusOfOrder(order.getStatus().toString())
                 .email(email)
                 .order(order.toMessageOrderDTO())
                 .timeOfCooking(timeOfCooking)
@@ -173,20 +177,25 @@ public class OrderService {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("No orders found for user with ID: " + orderId));
-        if(order.getStatus().equals(OrderStatus.CANCELED)){
+        if (order.getStatus().equals(OrderStatus.CANCELED)) {
             throw new OrderProcessingException("Order already cancelled");
+        }
+
+        if (order.getStatus().equals(OrderStatus.DELIVERED)) {
+            throw new OrderProcessingException("Order already delivered");
         }
         order.setStatus(orderStatus);
 
         Order updatedOrder = orderRepository.save(order);
+        log.info("Changed Order: {} {}", updatedOrder.getId(), updatedOrder.getStatus());
         webSocketDeliveryStatusService.sendOrderStatusUpdate(updatedOrder.getStatus(), updatedOrder);
         return updatedOrder;
     }
 
-    public void updateSocket(ProcessCourierOrderRequest request){
+    public void updateSocket(ProcessCourierOrderRequest request) {
         Order order = orderRepository.findById(request.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException("No orders found for user with ID: " + request.getOrderId()));
-        if(order.getStatus().equals(OrderStatus.CANCELED)){
+        if (order.getStatus().equals(OrderStatus.CANCELED)) {
             throw new OrderProcessingException("Order already cancelled");
         }
         order.setStatus(request.getOrderStatus());

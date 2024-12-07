@@ -14,7 +14,7 @@ import java.io.InputStream;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class CSVServiceTest {
+class CSVServiceTest {
 
     @Mock
     private ProductService productService;

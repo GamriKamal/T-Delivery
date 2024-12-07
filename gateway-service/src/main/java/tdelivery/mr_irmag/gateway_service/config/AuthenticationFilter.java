@@ -1,5 +1,6 @@
 package tdelivery.mr_irmag.gateway_service.config;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -40,19 +41,27 @@ public class AuthenticationFilter implements GatewayFilter {
 
             final String token = this.getAuthHeader(request);
 
-            if (jwtUtil.isInvalid(token)) {
-                return this.redirectToAuthService(exchange, chain);
+            try {
+                if (jwtUtil.isInvalid(token)) {
+                    exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                    return exchange.getResponse().setComplete();
+                }
+            } catch (ExpiredJwtException e) {
+                System.err.println("JWT token expired: " + e.getMessage());
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                return exchange.getResponse().setComplete();
             }
 
             String id = jwtUtil.extractID(token);
             String role = jwtUtil.extractRole(token);
             System.out.println(role + " role");
 
-            if(request.getURI().getPath().matches("/users(/.*)?")  && !role.equals("ADMIN")){
+            // Прочие проверки ролей
+            if (request.getURI().getPath().matches("/users(/.*)?") && !role.equals("ADMIN")) {
                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
             }
-            
+
             if (request.getURI().getPath().matches("/menu(/.*)?") && !role.equals("ADMIN")) {
                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
