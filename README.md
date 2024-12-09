@@ -112,7 +112,7 @@ Google API ключ необходим для использования раз�
 
 1. **Клонируйте репозиторий**:
     ```bash
-    git clone https://github.com/yourusername/T-Delivery.git
+    git clone https://github.com/GamriKamal/T-Delivery.git
     cd T-Delivery
     ```
 
