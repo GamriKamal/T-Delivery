@@ -10,11 +10,11 @@ import lombok.Data;
 @Builder
 public class CalculateOrderItemRequest {
 
-    @NotBlank(message = "Product name must not be empty")
-    @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
+    @NotBlank(message = "Название продукта не должно быть пустым")
+    @Size(min = 2, max = 100, message = "Название продукта должно содержать от 2 до 100 символов")
     private String name;
 
-    @Positive(message = "Price must be a positive number")
+    @Positive(message = "Цена должна быть положительным числом")
     private Double price;
 
     @Positive(message = "Количество должно быть положительным числом")

@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.*;
 import org.springframework.data.geo.Point;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import tdelivery.mr_irmag.order_service.Kafka.KafkaProducerService;
+import tdelivery.mr_irmag.order_service.exception.InvalidOrderStatusException;
+import tdelivery.mr_irmag.order_service.kafka.KafkaProducerService;
 import tdelivery.mr_irmag.order_service.domain.dto.KafkaDelayedMessageDTO;
-import tdelivery.mr_irmag.order_service.domain.dto.OrderUpdateMessage;
+import tdelivery.mr_irmag.order_service.domain.dto.ProcessCourierOrderRequest;
 import tdelivery.mr_irmag.order_service.domain.dto.calculationDelivery.CalculateOrderRequest;
 import tdelivery.mr_irmag.order_service.domain.dto.calculationDelivery.CalculationDeliveryResponse;
 import tdelivery.mr_irmag.order_service.domain.dto.calculationDelivery.RouteServiceResponse;
@@ -49,7 +51,9 @@ public class OrderService {
     public CalculationDeliveryResponse calculateOrder(CalculateOrderRequest calculateOrderRequest) {
         RouteServiceResponse routeServiceResponse = routeServiceClient.calculateDelivery(calculateOrderRequest);
         CalculationDeliveryResponse response = CalculationDeliveryResponse.toCalculationDeliveryResponse(routeServiceResponse);
-        log.info(response.getRestaurantCoordinates().toString());
+
+        log.info(response.toString());
+
         double productPrice = calculateOrderRequest.getItems().stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
@@ -58,13 +62,11 @@ public class OrderService {
         response.setTotalPrice(response.getDeliveryPrice() + productPrice);
 
         orderCacheService.cacheTotalAmount(calculateOrderRequest.getAddress(), response.getTotalPrice());
-        orderCacheService.cacheCoordinates(calculateOrderRequest.getAddress(), response.getRestaurantCoordinates());
+        orderCacheService.cacheRestaurantCoordinates(calculateOrderRequest.getAddress(), response.getRestaurantCoordinates());
         orderCacheService.cacheRestaurantAddress(calculateOrderRequest.getAddress(), response.getRestaurantAddress());
+        orderCacheService.cacheDeliveryTime(calculateOrderRequest.getAddress(), response.getDeliveryDuration());
+        orderCacheService.cacheUserCoordinates(calculateOrderRequest.getAddress(), response.getUserPoint());
         return response;
-//        log.info("Calculating order: {}", userId.toString());
-//        orderCacheService.cacheTotalAmount(userId, 100.0);
-//        orderCacheService.cacheCoordinates(userId, new Point(1,2));
-//        return new CalculationDeliveryResponse(null, null, null, "15 min", null, null);
     }
 
     public List<UserOrderRequestDTO> getOrdersOfUser(UUID userId, int page, int size) {
@@ -94,14 +96,18 @@ public class OrderService {
         }
     }
 
-    public void processOrder(UUID id, @RequestBody CalculateOrderRequest calculateOrderRequest) {
+    public void processOrder(UUID id, CalculateOrderRequest calculateOrderRequest) {
         try {
             UserInfoResponseDTO userDTO = getUsernameAndEmailOfUserById(id);
             Double totalAmount = orderCacheService.getTotalAmount(calculateOrderRequest.getAddress());
-            Point location = orderCacheService.getCoordinates(calculateOrderRequest.getAddress());
+            Point restaurantCoordinates = orderCacheService.getRestaurantCoordinates(calculateOrderRequest.getAddress());
+            Point userCoordinates = orderCacheService.getUserCoordinates(calculateOrderRequest.getAddress());
             String restaurantAddress = orderCacheService.getRestaurantAddress(calculateOrderRequest.getAddress());
+            Integer timeOfDelivery = orderCacheService.getDeliveryTime(calculateOrderRequest.getAddress());
 
-            Order newOrder = Order.from(id, calculateOrderRequest, userDTO, totalAmount, location, restaurantAddress);
+
+            Order newOrder = Order.from(id, calculateOrderRequest, userDTO, totalAmount,
+                    restaurantCoordinates, userCoordinates, restaurantAddress, timeOfDelivery);
             calculateOrderRequest.getItems().forEach(item -> log.info(item.toString()));
             List<OrderItem> orderItems = OrderItem.from(calculateOrderRequest.getItems(), newOrder);
 
@@ -119,18 +125,29 @@ public class OrderService {
 
             webSocketDeliveryStatusService.sendOrderStatusUpdate(newOrder.getStatus(), newOrder);
 
-            orderCacheService.removeCoordinates(calculateOrderRequest.getAddress());
+            orderCacheService.removeRestaurantCoordinates(calculateOrderRequest.getAddress());
             orderCacheService.removeTotalAmount(calculateOrderRequest.getAddress());
             orderCacheService.removeRestaurantAddress(calculateOrderRequest.getAddress());
+            orderCacheService.removeDeliveryTime(calculateOrderRequest.getAddress());
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage() + " " + e.getClass().getName() + " " + e.getMessage());
+            log.error("{} {} {}", e.getLocalizedMessage(), e.getClass().getName(), e.getMessage());
             throw new OrderProcessingException("Error processing order for user ID: " + id + e.getLocalizedMessage() + " " + e.getCause());
         }
     }
 
+    @Async
+    @Transactional
+    public void sendEmail(UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("No order found for id: " + orderId));
+        UserInfoResponseDTO userDTO = getUsernameAndEmailOfUserById(order.getUserId());
+        log.info("Sending message: {} {}", order.getId(), order.getStatus());
+
+        sendOrderEmail(userDTO.getEmail(), order, 1);
+    }
+
     private void sendOrderEmail(String email, Order order, int timeOfCooking) {
         messageServiceClient.sendEmail(MessageRequestDTO.builder()
-                .statusOfOrder(OrderStatus.PAID.toString())
+                .statusOfOrder(order.getStatus().toString())
                 .email(email)
                 .order(order.toMessageOrderDTO())
                 .timeOfCooking(timeOfCooking)
@@ -150,14 +167,42 @@ public class OrderService {
     }
 
     @Transactional
-    public Order changeStatusOfOrder(UUID orderId, OrderStatus orderStatus){
+    public Order changeStatusOfOrder(UUID orderId, String stringStatus) {
+        OrderStatus orderStatus = null;
+        try {
+            orderStatus = OrderStatus.valueOf(stringStatus);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidOrderStatusException("Invalid status: " + stringStatus);
+        }
+
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("No orders found for user with ID: " + orderId));
+        if (order.getStatus().equals(OrderStatus.CANCELED)) {
+            throw new OrderProcessingException("Order already cancelled");
+        }
+
+        if (order.getStatus().equals(OrderStatus.DELIVERED)) {
+            throw new OrderProcessingException("Order already delivered");
+        }
         order.setStatus(orderStatus);
 
         Order updatedOrder = orderRepository.save(order);
+        log.info("Changed Order: {} {}", updatedOrder.getId(), updatedOrder.getStatus());
         webSocketDeliveryStatusService.sendOrderStatusUpdate(updatedOrder.getStatus(), updatedOrder);
         return updatedOrder;
+    }
+
+    public void updateSocket(ProcessCourierOrderRequest request) {
+        Order order = orderRepository.findById(request.getOrderId())
+                .orElseThrow(() -> new OrderNotFoundException("No orders found for user with ID: " + request.getOrderId()));
+        if (order.getStatus().equals(OrderStatus.CANCELED)) {
+            throw new OrderProcessingException("Order already cancelled");
+        }
+        order.setStatus(request.getOrderStatus());
+
+        Order updatedOrder = orderRepository.save(order);
+
+        webSocketDeliveryStatusService.sendCourierStatusUpdate(updatedOrder.getStatus(), updatedOrder, request);
     }
 
     public List<NearestOrderResponseDto> getNearestOrders(int radius, Point point) {
@@ -169,6 +214,5 @@ public class OrderService {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("No order found with ID: " + orderId));
     }
-
 
 }

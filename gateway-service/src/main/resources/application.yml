@@ -7,7 +7,7 @@ spring:
     eureka:
       client:
         service-url:
-          defaultZone: http://localhost:8761/eureka/
+          defaultZone: http://discovery-service:8761/eureka/
         register-with-eureka: true
         fetch-registry: true
     gateway:
@@ -18,9 +18,16 @@ spring:
     loadbalancer:
       ribbon:
         enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 token:
   signing:
-    key: "YOUR SIGNING KEY"
+    key: bXlT3cQ7GQ9PTeRHz0kF8FlqKuoZQzP4Vbq4YlU1sjI=
 
 
 logging:

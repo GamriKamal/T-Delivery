@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tdelivery.mr_irmag.order_service.domain.dto.ErrorResponse;
+import tdelivery.mr_irmag.order_service.exception.InvalidOrderStatusException;
 import tdelivery.mr_irmag.order_service.exception.OrderNotFoundException;
 import tdelivery.mr_irmag.order_service.exception.OrderProcessingException;
 import tdelivery.mr_irmag.order_service.exception.UserServiceCommunicationException;
@@ -14,7 +16,7 @@ import tdelivery.mr_irmag.order_service.exception.UserServiceCommunicationExcept
 import java.time.LocalDateTime;
 
 @Log4j2
-@ControllerAdvice
+@RestControllerAdvice
 @Order(1)
 public class OrderServiceExceptionHandler {
 
@@ -29,6 +31,16 @@ public class OrderServiceExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidOrderStatusException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidOrderStatus(InvalidOrderStatusException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                400,
+                LocalDateTime.now(),
+                "Invalid order status: " + ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(OrderProcessingException.class)
@@ -50,11 +62,11 @@ public class OrderServiceExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .errorCode(HttpStatus.SERVICE_UNAVAILABLE.value())
+                .errorCode(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getLocalizedMessage())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
 }

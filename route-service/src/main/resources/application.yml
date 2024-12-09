@@ -2,8 +2,7 @@ spring:
   application:
     name: route-service
   datasource:
-    #    url: jdbc:postgresql://postgresql_db:5432/auth_db
-    url: jdbc:postgresql://localhost:5435/routes_db
+    url: jdbc:postgresql://route-service-postgresql_db:5435/routes_db
     driver-class-name: org.postgresql.Driver
     username: irmag
     password: 123
@@ -19,13 +18,20 @@ spring:
     init:
       mode: always
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+
 google:
   distanceMatrix:
     url: https://maps.googleapis.com/maps/api/distancematrix/json?
   geocode:
-    url: https://maps.googleapis.com/maps/api/geocode/json?key=YOUR API KEY&address=
+    url: https://maps.googleapis.com/maps/api/geocode/json?key=YOUR_API_KEY=
   googlemaps:
-    api_key: YOUR API KEY
+    api_key: YOUR_API_KEY
 
 tdelivery:
   basePrice: 500.0

@@ -1,5 +1,6 @@
 package tdelivery.mr_irmag.route_service.advice;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,6 +13,7 @@ import tdelivery.mr_irmag.route_service.exception.RestaurantNotFoundException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
+@Order(2)
 public class RestaurantExceptionHandler {
 
     @ExceptionHandler(RestaurantNotFoundException.class)

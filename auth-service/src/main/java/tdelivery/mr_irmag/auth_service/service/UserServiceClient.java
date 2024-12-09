@@ -17,18 +17,17 @@ import tdelivery.mr_irmag.auth_service.domain.dto.SignInRequest;
 import tdelivery.mr_irmag.auth_service.domain.dto.SignUpRequest;
 import tdelivery.mr_irmag.auth_service.domain.dto.UserDTO;
 import tdelivery.mr_irmag.auth_service.domain.model.User;
-import tdelivery.mr_irmag.auth_service.exceptions.UserNotFoundException;
+import tdelivery.mr_irmag.auth_service.exceptions.*;
 
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class UserServiceClient {
-    @Value("${tdelivery.user-service.url}")
-    private String userServiceURL;
-
     private final RestTemplate restTemplate;
     private final Gson gson;
+    @Value("${tdelivery.user-service.url}")
+    private String userServiceURL;
 
     public User getUserByUsername(SignInRequest request) {
         if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
@@ -50,21 +49,20 @@ public class UserServiceClient {
                     String.class
             );
 
-            return mapToEntity(gson.fromJson(responseEntity.getBody(), UserDTO.class));
+            log.info("Response: {}", responseEntity.getBody());
+
+            return User.of(gson.fromJson(responseEntity.getBody(), UserDTO.class));
 
         } catch (HttpClientErrorException.NotFound e) {
-            throw new UserNotFoundException("User with username " + request.getUsername() + " not found" + e.getLocalizedMessage());
+            throw new UserNotFoundException("User with username " + request.getUsername() + " not found. " + e.getLocalizedMessage());
         } catch (HttpClientErrorException.BadRequest e) {
-            throw new IllegalArgumentException("Invalid request for username " + request.getUsername() + e.getLocalizedMessage());
-        } catch (HttpServerErrorException e) {
-            throw new RuntimeException("Server error occurred while fetching user with username " + request.getUsername() + e.getLocalizedMessage());
+            throw new InvalidRequestException("Invalid request for username " + request.getUsername() + ". " + e.getLocalizedMessage());
         } catch (ResourceAccessException e) {
-            throw new RuntimeException("Unable to access user-service. Please try again later." + e.getLocalizedMessage());
+            throw new ServiceUnavailableException("Unable to access user-service. Please try again later. " + e.getLocalizedMessage());
         } catch (Exception e) {
-            throw new RuntimeException("An unexpected error occurred while fetching user with username " + request.getUsername() + e.getLocalizedMessage());
+            throw new UnexpectedErrorException("An unexpected error occurred while fetching user with username " + request.getUsername() + ". " + e.getLocalizedMessage());
         }
     }
-
 
     public User createUser(SignUpRequest request) {
         HttpHeaders headers = new HttpHeaders();
@@ -72,25 +70,23 @@ public class UserServiceClient {
 
         HttpEntity<SignUpRequest> requestEntity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                userServiceURL,
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    userServiceURL,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
 
-        return mapToEntity(gson.fromJson(responseEntity.getBody(), UserDTO.class));
+            return User.of(gson.fromJson(responseEntity.getBody(), UserDTO.class));
+
+        } catch (HttpClientErrorException.BadRequest e) {
+            throw new InvalidRequestException("Invalid request for creating user: " + e.getLocalizedMessage());
+        } catch (ResourceAccessException e) {
+            throw new ServiceUnavailableException("User-service is currently unavailable. Please try again later. " + e.getLocalizedMessage());
+        } catch (Exception e) {
+            throw new UnexpectedErrorException("An unexpected error occurred while creating user: " + e.getLocalizedMessage());
+        }
     }
 
-
-    public User mapToEntity(UserDTO userDTO) {
-        return User.builder()
-                .id(userDTO.getId())
-                .username(userDTO.getUsername())
-                .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
-                .role(userDTO.getRole())
-                .address(userDTO.getAddress())
-                .build();
-    }
 }

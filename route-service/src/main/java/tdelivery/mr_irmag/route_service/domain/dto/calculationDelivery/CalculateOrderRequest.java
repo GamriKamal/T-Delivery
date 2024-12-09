@@ -1,14 +1,14 @@
 package tdelivery.mr_irmag.route_service.domain.dto.calculationDelivery;
 
 import jakarta.validation.Valid;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data
@@ -16,13 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class CalculateOrderRequest {
-    @NotBlank
-    @Size(max = 100)
-    String comment;
+    @NotBlank(message = "Комментарий не может быть пустым")
+    @Size(max = 100, message = "Длина комментария не должна превышать 100 символов")
+    private String comment;
 
-    @NotEmpty(message = "Order items cannot be empty")
+
+    @NotEmpty(message = "Элементы заказа не могут быть пустыми")
     private List<@Valid CalculateOrderItemRequest> items;
 
-    @NotBlank(message = "Address cannot be blank")
+    @NotBlank(message = "Адрес не может быть пустым")
     private String address;
 }

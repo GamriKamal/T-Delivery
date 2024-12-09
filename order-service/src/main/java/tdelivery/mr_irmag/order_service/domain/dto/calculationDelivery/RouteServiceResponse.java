@@ -10,12 +10,12 @@ import org.springframework.data.geo.Point;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class RouteServiceResponse {
     private Double deliveryPrice;
-    private String deliveryDuration;
+    private Integer deliveryDuration;
     private String restaurantName;
     private String restaurantAddress;
     private Point restaurantCoordinates;
+    private Point userPoint;
 }
 

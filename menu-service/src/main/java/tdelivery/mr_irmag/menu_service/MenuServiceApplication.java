@@ -7,7 +7,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 public class MenuServiceApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(MenuServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MenuServiceApplication.class, args);
+    }
 }

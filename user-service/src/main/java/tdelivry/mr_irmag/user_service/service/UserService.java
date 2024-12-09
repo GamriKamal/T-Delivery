@@ -55,8 +55,6 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + userDTO.getUsername() + " or email: " + userDTO.getEmail()));
     }
 
-
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

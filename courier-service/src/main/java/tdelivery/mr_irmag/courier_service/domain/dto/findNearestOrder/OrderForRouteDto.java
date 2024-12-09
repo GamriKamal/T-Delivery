@@ -1,10 +1,8 @@
 package tdelivery.mr_irmag.courier_service.domain.dto.findNearestOrder;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import tdelivery.mr_irmag.courier_service.domain.dto.Point;
 import tdelivery.mr_irmag.courier_service.domain.entity.Order;
 
@@ -18,8 +16,15 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Schema(description = "Ответ на запрос о ближайших заказах, отсортированных по линии, с использованием PostGIS")
 public class OrderForRouteDto {
+
+    @NotNull(message = "Order ID cannot be null")
+    @Schema(description = "Идентификатор заказа", example = "f5f5f5f5-1111-1111-1111-111111111111")
     private UUID id;
+
+    @NotNull(message = "Order location cannot be null")
+    @Schema(description = "Географическая точка местоположения заказа", example = "POINT(37.6173 55.7558)")
     private Point orderLocation;
 
     public static List<OrderForRouteDto> from(List<Order> orders) {
@@ -31,3 +36,4 @@ public class OrderForRouteDto {
                 .collect(Collectors.toList());
     }
 }
+

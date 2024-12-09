@@ -3,7 +3,7 @@ spring:
     name: menu-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/menu-service
+      uri: mongodb://menu-service-mongodb:27017/menu-service
 
 server:
   port: 8082
@@ -12,7 +12,7 @@ cloud:
   eureka:
     client:
       service-url:
-        defaultZone: http://localhost:8761/eureka/
+        defaultZone: http://discovery-service:8761/eureka/
       register-with-eureka: true
       fetch-registry: true
 
@@ -20,7 +20,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health
+
 
 products:
   hardees:

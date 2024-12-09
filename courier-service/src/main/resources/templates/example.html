@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Симуляция Прогресса Курьера с Тремя Точками</title>
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    #progress-container {
+      width: 100%;
+      background-color: #ddd;
+      height: 30px;
+      border-radius: 5px;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: #4caf50;
+      border-radius: 5px;
+      text-align: center;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="progress-container">
+  <div id="progress-bar">0%</div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALR3HrzUsLLwY_KkIDutP8FCALjVzAdOw&callback=initMap" async defer></script>
+
+<script>
+  let map;
+  let courierMarker;
+  let pathCoordinatesAB = [];
+  let pathCoordinatesBC = [];
+  let directionsRendererAB;
+  let directionsRendererBC;
+  const origin = { lat: 43.2290938939317, lng: 76.89166642013913 }; // Точка A
+  const waypoint = { lat: 43.22996542816579, lng: 76.87693225197971}; // Точка B
+  const destination = { lat: 43.20079214900722, lng: 76.8925018763494 }; // Точка C
+  const simulationTimeAB = 0.5 * 60 * 1000; // Время для маршрута A -> B (30 секунд)
+  const simulationTimeBC = 0.5 * 60 * 1000; // Время для маршрута B -> C (30 секунд)
+  const pauseTime = 10 * 1000; // Пауза 10 секунд между этапами
+  let distanceTraveled = 0; // Накопленное расстояние
+  let totalDistanceAB, totalDistanceBC;
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: origin,
+      zoom: 12,
+    });
+
+    directionsRendererAB = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+    directionsRendererBC = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+    directionsRendererAB.setMap(map);
+    directionsRendererBC.setMap(map);
+
+    // Добавление начальных и конечных маркеров
+    new google.maps.Marker({ position: origin, map: map, title: "Точка A" });
+    new google.maps.Marker({ position: waypoint, map: map, title: "Точка B" });
+    new google.maps.Marker({ position: destination, map: map, title: "Точка C" });
+
+    const directionsService = new google.maps.DirectionsService();
+
+    // Маршрут A -> B
+    directionsService.route({
+      origin: origin,
+      destination: waypoint,
+      travelMode: google.maps.TravelMode.DRIVING,
+    }, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        directionsRendererAB.setDirections(result);
+        totalDistanceAB = computeTotalDistance(result);
+        pathCoordinatesAB = extractPathCoordinates(result);
+        startSimulationAB();
+      } else {
+        console.error("Ошибка получения маршрута A -> B: " + status);
+      }
+    });
+
+    // Маршрут B -> C
+    directionsService.route({
+      origin: waypoint,
+      destination: destination,
+      travelMode: google.maps.TravelMode.DRIVING,
+    }, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        directionsRendererBC.setDirections(result);
+        totalDistanceBC = computeTotalDistance(result);
+        pathCoordinatesBC = extractPathCoordinates(result);
+      } else {
+        console.error("Ошибка получения маршрута B -> C: " + status);
+      }
+    });
+  }
+
+  function extractPathCoordinates(result) {
+    const path = [];
+    const myRoute = result.routes[0].legs;
+    myRoute.forEach(leg => {
+      leg.steps.forEach(step => {
+        step.path.forEach(latlng => {
+          path.push(latlng);
+        });
+      });
+    });
+    return path;
+  }
+
+  function computeTotalDistance(result) {
+    let distance = 0;
+    const myRoute = result.routes[0].legs;
+    myRoute.forEach(leg => {
+      leg.steps.forEach(step => {
+        distance += step.distance.value;
+      });
+    });
+    return distance;
+  }
+
+  function startSimulationAB() {
+    courierMarker = new google.maps.Marker({
+      position: origin,
+      map: map,
+      title: "Курьер",
+      icon: "https://maps.google.com/mapfiles/kml/shapes/truck.png",
+    });
+
+    runSimulation(simulationTimeAB, pathCoordinatesAB, totalDistanceAB, () => {
+      setTimeout(startSimulationBC, pauseTime); // Пауза перед запуском следующего этапа
+    });
+  }
+
+  function startSimulationBC() {
+    courierMarker.setPosition(waypoint);
+    runSimulation(simulationTimeBC, pathCoordinatesBC, totalDistanceBC, () => {
+      console.log("Маршрут завершён.");
+    });
+  }
+
+  function runSimulation(simulationTime, pathCoordinates, segmentDistance, onComplete) {
+    let progress = 0;
+    const startTime = Date.now();
+    const interval = 1000; // Обновление каждую секунду
+
+    const simulationInterval = setInterval(() => {
+      const elapsedTime = Date.now() - startTime;
+      progress = elapsedTime / simulationTime;
+
+      if (progress >= 1) {
+        clearInterval(simulationInterval);
+        progress = 1;
+        if (onComplete) {
+          onComplete();
+        }
+      }
+
+      const newPosition = interpolatePosition(pathCoordinates, progress);
+      updateCourierPosition(newPosition.lat(), newPosition.lng(), segmentDistance);
+    }, interval);
+  }
+
+  function interpolatePosition(path, progress) {
+    const index = Math.floor(progress * (path.length - 1));
+    return path[index];
+  }
+
+  function updateCourierPosition(lat, lng, segmentDistance) {
+    const courierPosition = new google.maps.LatLng(lat, lng);
+    const previousPosition = courierMarker.getPosition();
+
+    if (previousPosition) {
+      const distanceIncrement = google.maps.geometry.spherical.computeDistanceBetween(previousPosition, courierPosition);
+      distanceTraveled += distanceIncrement;
+    }
+
+    courierMarker.setPosition(courierPosition);
+    updateProgressBar(distanceTraveled, totalDistanceAB + totalDistanceBC);
+  }
+
+  function updateProgressBar(currentDistance, totalDistance) {
+    const progressPercent = Math.min((currentDistance / totalDistance) * 100, 100);
+    const progressBar = document.getElementById("progress-bar");
+    progressBar.style.width = progressPercent + "%";
+    progressBar.textContent = Math.round(progressPercent) + "%";
+  }
+</script>
+</body>
+</html>

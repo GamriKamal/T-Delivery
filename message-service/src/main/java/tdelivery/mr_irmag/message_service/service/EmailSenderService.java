@@ -35,8 +35,8 @@ public class EmailSenderService {
         try {
             sendHtmlEmail(request.getEmail(), subject, htmlContent);
         } catch (MessagingException e) {
-            log.error("Ошибка при отправке письма", e);
-            return false;
+            log.error("Error sending email", e);
+            throw new RuntimeException(e);
         }
         return true;
     }
@@ -48,7 +48,7 @@ public class EmailSenderService {
         try {
             sendHtmlEmail(request.getEmail(), subject, htmlContent);
         } catch (MessagingException e) {
-            log.error("Ошибка при отправке сообщения о готовности заказа", e);
+            log.error("Error sending order readiness message", e);
         }
     }
 
@@ -59,22 +59,36 @@ public class EmailSenderService {
         try {
             sendHtmlEmail(request.getEmail(), subject, htmlContent);
         } catch (MessagingException e) {
-            log.error("Ошибка при отправке сообщения о взятии заказа курьером", e);
+            log.error("Error sending courier pickup message", e);
         }
     }
 
-    public boolean sendOrderDeliveredMessage(CourierMessageDto request) {
+    public boolean sendOrderDeliveredMessage(UserMessageRequestDTO request) {
         String subject = "Ваш заказ доставлен!";
         String htmlContent = loadHtmlTemplateForDelivery();
 
         try {
             sendHtmlEmail(request.getEmail(), subject, htmlContent);
         } catch (MessagingException e) {
-            log.error("Ошибка при отправке письма о доставке заказа", e);
+            log.error("Error sending order delivery email", e);
             return false;
         }
         return true;
     }
+
+    public boolean sendCanceledStatusMessage(UserMessageRequestDTO request) {
+        String subject = "Ваш заказ отменен";
+        String htmlContent = loadHtmlTemplateForCanceledOrder(request.getOrder());
+
+        try {
+            sendHtmlEmail(request.getEmail(), subject, htmlContent);
+        } catch (MessagingException e) {
+            log.error("Error sending canceled order email", e);
+            return false;
+        }
+        return true;
+    }
+
 
     private String loadHtmlTemplateForOrderStatusUpdate(CourierMessageDto messageRequest) {
         InputStream inputStream = loadResourceAsStream("templates/order_status_update.html");
@@ -90,7 +104,7 @@ public class EmailSenderService {
                 htmlBuilder.append(line).append("\n");
             }
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при загрузке HTML шаблона для обновления статуса заказа", e);
+            throw new RuntimeException("Error loading HTML template for order status update", e);
         }
 
         return htmlBuilder.toString();
@@ -106,7 +120,7 @@ public class EmailSenderService {
                 htmlBuilder.append(line).append("\n");
             }
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при загрузке HTML шаблона для уведомления о доставке заказа", e);
+            throw new RuntimeException("Error loading HTML template for order delivery notification", e);
         }
 
         return htmlBuilder.toString();
@@ -133,6 +147,27 @@ public class EmailSenderService {
         return htmlBuilder.toString();
     }
 
+    private String loadHtmlTemplateForCanceledOrder(OrderDTO order) {
+        InputStream inputStream = loadResourceAsStream("templates/order_canceled.html");
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.replace("${name}", order.getName())
+                        .replace("${deliveryAddress}", order.getDeliveryAddress())
+                        .replace("${totalAmount}", String.valueOf(order.getTotalAmount()))
+                        .replace("${orderItems}", createOrderItemsHtml(order.getOrderItems()));
+
+                htmlBuilder.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading HTML template for canceled order", e);
+        }
+
+        return htmlBuilder.toString();
+    }
+
 
     private void sendHtmlEmail(String to, String subject, String htmlContent) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
@@ -145,7 +180,6 @@ public class EmailSenderService {
         } else {
             log.warn("SVG resource not found or couldn't be loaded");
         }
-
 
         mailSender.send(message);
     }
@@ -189,7 +223,7 @@ public class EmailSenderService {
     private InputStream loadResourceAsStream(String resourcePath) {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
         if (inputStream == null) {
-            throw new RuntimeException(resourcePath + " не найден в ресурсах!");
+            throw new RuntimeException(resourcePath + " not found in the resources!");
         }
         return inputStream;
     }
@@ -205,7 +239,7 @@ public class EmailSenderService {
             }
             return outputStream.toByteArray();
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при загрузке ресурса как байтового массива: " + resourcePath, e);
+            throw new RuntimeException("Error loading a resource as a byte array: " + resourcePath, e);
         }
     }
 

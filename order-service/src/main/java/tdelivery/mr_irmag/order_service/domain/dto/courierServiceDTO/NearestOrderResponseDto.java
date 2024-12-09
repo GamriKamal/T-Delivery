@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 import tdelivery.mr_irmag.order_service.domain.entity.Order;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,9 +26,14 @@ public class NearestOrderResponseDto {
     private Double totalAmount;
     private String restaurantAddress;
     private Point location;
+    private Integer timeOfDelivery;
     private List<NearestOrderItemResponseDto> items;
 
     public static List<NearestOrderResponseDto> from(List<Order> items) {
+        if (items == null || items.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return items.stream()
                 .map(item -> NearestOrderResponseDto.builder()
                         .name(item.getName())
@@ -36,10 +42,13 @@ public class NearestOrderResponseDto {
                         .id(item.getId())
                         .createdDate(String.valueOf(item.getCreatedDate()))
                         .deliveryAddress(item.getDeliveryAddress())
-                        .location(new Point(item.getPosition().getX(), item.getPosition().getY()))
+                        .location(new Point(item.getRestaurantCoordinates().getX(), item.getRestaurantCoordinates().getY()))
                         .restaurantAddress(item.getRestaurantAddress())
                         .email(item.getEmail())
-                        .items(NearestOrderItemResponseDto.from(item.getOrderItems()))
+                        .timeOfDelivery(item.getTimeOfDelivery())
+                        .items(item.getOrderItems() == null ?
+                                Collections.emptyList() :
+                                NearestOrderItemResponseDto.from(item.getOrderItems()))
                         .build())
                 .collect(Collectors.toList());
     }

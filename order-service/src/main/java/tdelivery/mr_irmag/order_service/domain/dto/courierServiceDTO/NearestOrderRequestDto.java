@@ -17,6 +17,7 @@ public class NearestOrderRequestDto {
 
     @Min(1)
     @Max(7)
+    @Builder.Default
     private int radius = 3;
 
     @NotNull

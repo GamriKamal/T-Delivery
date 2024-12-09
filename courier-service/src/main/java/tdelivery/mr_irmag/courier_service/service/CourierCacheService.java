@@ -8,16 +8,18 @@ import tdelivery.mr_irmag.courier_service.domain.dto.Point;
 import tdelivery.mr_irmag.courier_service.domain.dto.RouteServiceResponse;
 import tdelivery.mr_irmag.courier_service.domain.entity.Order;
 
+import java.util.List;
+
 @Service
 public class CourierCacheService {
 
     @Cacheable(value = "orderCache", key = "#courierCoordinates")
-    public Order getOptimalOrder(Point courierCoordinates) {
+    public List<Order> getOptimalOrder(Point courierCoordinates) {
         return null;
     }
 
     @CachePut(value = "orderCache", key = "#courierCoordinates")
-    public Order cacheOptimalOrder(Point courierCoordinates, Order order) {
+    public List<Order> cacheOptimalOrders(Point courierCoordinates, List<Order> order) {
         return order;
     }
 
@@ -40,3 +42,4 @@ public class CourierCacheService {
     }
 
 }
+
