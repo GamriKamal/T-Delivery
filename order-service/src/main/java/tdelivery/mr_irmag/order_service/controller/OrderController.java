@@ -1,5 +1,6 @@
 package tdelivery.mr_irmag.order_service.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.annotation.Generated;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,18 +27,8 @@ import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.content.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.Parameter;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/order")

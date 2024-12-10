@@ -13,13 +13,9 @@ SERVICES := auth-service courier-service discovery-service gateway-service menu-
 SERVICE_PATHS := $(addprefix $(ROOT_DIR)/, $(SERVICES))
 
 MAVEN_BUILD_CMD := mvn clean package
-GRADLE_BUILD_CMD := ./gradlew clean build
+GRADLE_BUILD_CMD := ./gradlew clean build --console=plain --info
 
 DOCKER_COMPOSE := docker-compose
-
-LOG_DIR := $(CURDIR)/tdelivery_logs
-
-$(shell mkdir -p $(LOG_DIR))
 
 .PHONY: build build-all docker-up docker-down
 
@@ -29,15 +25,18 @@ build:
 	else \
 		if [ -d $(ROOT_DIR)/$(name) ]; then \
 			echo "$(COLOR_BLUE)[$(LABEL)] Building $(name)$(COLOR_RESET)"; \
-			rm -f $(LOG_DIR)/$(name)_build.log; \
 			sleep 0.2; \
 			if [ -f $(ROOT_DIR)/$(name)/pom.xml ]; then \
-				cd $(ROOT_DIR)/$(name) && $(MAVEN_BUILD_CMD) > $(LOG_DIR)/$(name)_build.log 2>&1; \
+				script -q -c "cd $(ROOT_DIR)/$(name) && $(MAVEN_BUILD_CMD)" /dev/null || { \
+					echo "$(COLOR_BLUE)[$(LABEL)] Build failed for $(name). Stopping.$(COLOR_RESET)"; exit 1; }; \
 			elif [ -f $(ROOT_DIR)/$(name)/build.gradle.kts ] || [ -f $(ROOT_DIR)/$(name)/build.gradle ]; then \
-				cd $(ROOT_DIR)/$(name) && $(GRADLE_BUILD_CMD) > $(LOG_DIR)/$(name)_build.log 2>&1; \
+				script -q -c "cd $(ROOT_DIR)/$(name) && $(GRADLE_BUILD_CMD)" /dev/null || { \
+					echo "$(COLOR_BLUE)[$(LABEL)] Build failed for $(name). Stopping.$(COLOR_RESET)"; exit 1; }; \
 			else \
 				echo "$(COLOR_BLUE)[$(LABEL)] Build file not found for $(name). Skipping.$(COLOR_RESET)"; \
 			fi; \
+			echo ""; echo ""; \
+			sleep 10; \
 		else \
 			echo "$(COLOR_BLUE)[$(LABEL)] Service $(name) not found.$(COLOR_RESET)"; \
 		fi; \
@@ -45,22 +44,22 @@ build:
 
 build-all:
 	@echo "$(COLOR_BLUE)[$(LABEL)] Building all services...$(COLOR_RESET)"
-	rm -f $(LOG_DIR)/*_build.log
 	@for service in $(SERVICES); do \
-		echo ""; \
 		echo "$(COLOR_BLUE)[$(LABEL)] Building $$service$(COLOR_RESET)"; \
 		sleep 0.2; \
 		if [ -f $(ROOT_DIR)/$$service/pom.xml ]; then \
-			cd $(ROOT_DIR)/$$service && $(MAVEN_BUILD_CMD) > $(LOG_DIR)/$$service_build.log 2>&1; \
+			script -q -c "cd $(ROOT_DIR)/$$service && $(MAVEN_BUILD_CMD)" /dev/null || { \
+				echo "$(COLOR_BLUE)[$(LABEL)] Build failed for $$service. Stopping.$(COLOR_RESET)"; exit 1; }; \
 		elif [ -f $(ROOT_DIR)/$$service/build.gradle.kts ] || [ -f $(ROOT_DIR)/$$service/build.gradle ]; then \
-			cd $(ROOT_DIR)/$$service && $(GRADLE_BUILD_CMD) > $(LOG_DIR)/$$service_build.log 2>&1; \
+			script -q -c "cd $(ROOT_DIR)/$$service && $(GRADLE_BUILD_CMD)" /dev/null || { \
+				echo "$(COLOR_BLUE)[$(LABEL)] Build failed for $$service. Stopping.$(COLOR_RESET)"; exit 1; }; \
 		else \
 			echo "$(COLOR_BLUE)[$(LABEL)] Build file not found for $$service. Skipping.$(COLOR_RESET)"; \
 		fi; \
+		echo ""; echo ""; \
+		sleep 10; \
 	done
 	@echo "$(COLOR_BLUE)[$(LABEL)] All services built successfully.$(COLOR_RESET)"
-	@echo "$(COLOR_BLUE)[$(LABEL)] You can view the logs in the following folder: $(LOG_DIR)/$(COLOR_RESET)"
-	@echo "$(COLOR_BLUE)[$(LABEL)] Click here: file://$(LOG_DIR)/$(COLOR_RESET)"
 
 docker-up:
 	@echo "$(COLOR_BLUE)[$(LABEL)] Starting database and Kafka containers...$(COLOR_RESET)"

@@ -1,8 +1,8 @@
 package tdelivery.mr_irmag.order_service.domain.entity;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.properties.ArraySchema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -96,6 +96,8 @@ public class Order {
     @ArraySchema(schema = @Schema(implementation = OrderItem.class))
     @Schema(description = "Список товаров в заказе")
     private List<OrderItem> orderItems;
+
+    private static final GeometryFactory geometryFactory = new GeometryFactory();
 
     public Order(OrderStatus status) {
         this.status = status;

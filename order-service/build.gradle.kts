@@ -52,7 +52,7 @@ dependencies {
 	implementation("org.hibernate:hibernate-spatial:6.6.1.Final")
 
 	// Swagger
-	implementation("org.springdoc:springdoc-openapi-ui:2.1.0")
+	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 
 	// Lombok
 	compileOnly("org.projectlombok:lombok")
