@@ -29,9 +29,9 @@ google:
   distanceMatrix:
     url: https://maps.googleapis.com/maps/api/distancematrix/json?
   geocode:
-    url: https://maps.googleapis.com/maps/api/geocode/json?key=YOUR_API_KEY=
+    url: https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyALR3HrzUsLLwY_KkIDutP8FCALjVzAdOw&address=
   googlemaps:
-    api_key: YOUR_API_KEY
+    api_key: AIzaSyALR3HrzUsLLwY_KkIDutP8FCALjVzAdOw
 
 tdelivery:
   basePrice: 500.0

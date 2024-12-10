@@ -59,25 +59,17 @@ class ProductControllerIntegrationTest {
                         .build()
         );
 
-        Page<ProductResponse> productPage = new PageImpl<>(products, PageRequest.of(0, 10), 2);
-
-        Mockito.when(productService.getAllProducts(Mockito.any(Pageable.class))).thenReturn(productPage);
+        Mockito.when(productService.getAllProducts(0, 10)).thenReturn(products);
 
         // Act & Assert
-        mockMvc.perform(get("/menu/products")
-                        .param("page", "0")
-                        .param("size", "10"))
+        mockMvc.perform(get("/menu/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content.size()").value(2))
-                .andExpect(jsonPath("$.content[0].name").value("Product 1"))
-                .andExpect(jsonPath("$.content[0].price").value(100.0))
-                .andExpect(jsonPath("$.content[1].name").value("Product 2"))
-                .andExpect(jsonPath("$.content[1].price").value(200.0))
-                .andExpect(jsonPath("$.totalElements").value(2))
-                .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.size").value(10))
-                .andExpect(jsonPath("$.number").value(0));
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].name").value("Product 1"))
+                .andExpect(jsonPath("$[0].price").value(100.0))
+                .andExpect(jsonPath("$[1].name").value("Product 2"))
+                .andExpect(jsonPath("$[1].price").value(200.0));
     }
 
 

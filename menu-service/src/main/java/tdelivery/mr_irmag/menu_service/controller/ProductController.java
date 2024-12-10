@@ -33,13 +33,16 @@ public class ProductController {
         this.csvService = csvService;
     }
 
-    @Operation(summary = "Получить доступ ко всем пунктам меню", description = "Получить список всех продуктов из меню")
+    @Operation(summary = "Получить доступ ко всем пунктам меню", description = "Получить список всех продуктов из меню с пагинацией")
     @ApiResponse(responseCode = "200", description = "Успешно получен список продуктов",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ProductResponse.class)))
     @GetMapping("/products")
-    public ResponseEntity<List<ProductResponse>> getMenuItems() {
-        List<ProductResponse> productList = productService.getAllProducts();
+    public ResponseEntity<List<ProductResponse>> getMenuItems(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        List<ProductResponse> productList = productService.getAllProducts(page, size);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 

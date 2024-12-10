@@ -13,10 +13,6 @@ import java.util.stream.Collectors;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Builder
